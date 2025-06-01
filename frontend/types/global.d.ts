@@ -10,7 +10,7 @@ interface Product {
   slug: string;
   description: string;
   price: number;
-  category?: Category;
+  categoryId?: Category;
   variants: {
     sku: string;
     stockLevel?: number;

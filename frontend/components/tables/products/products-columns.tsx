@@ -38,7 +38,7 @@ export const columns: ColumnDef<Product>[] = [
     },
   },
   {
-    accessorKey: "categoryId.name",
+    accessorKey: "category.name",
     header: ({ column }) => {
       return (
         <button
@@ -55,7 +55,7 @@ export const columns: ColumnDef<Product>[] = [
 
       return (
         <div className="px-1">
-          {product.categoryId ? product.categoryId.name : "No Category"}
+          {product.categoryId?._id ? product.categoryId.name : "No Category"}
         </div>
       );
     },

@@ -1,12 +1,12 @@
 import React from "react";
+import { columns } from "./categories-columns";
 import { DataTable } from "../data-table";
-import { columns } from "./products-columns";
 
 interface Props {
-  data: Product[];
+  data: Category[];
 }
 
-const ProductTable = ({ data }: Props) => {
+const CategoriesTable = ({ data }: Props) => {
   return (
     <div className="container mx-auto py-10">
       <DataTable columns={columns} data={data} />
@@ -14,4 +14,4 @@ const ProductTable = ({ data }: Props) => {
   );
 };
 
-export default ProductTable;
+export default CategoriesTable;

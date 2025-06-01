@@ -1,6 +1,7 @@
 "use client";
 
 import CreateCategoryModal from "@/components/modal/categories/CreateCategoryModal";
+import CategoriesTable from "@/components/tables/categories/CategoriesTable";
 import { useGetCategories } from "@/hooks/categories/useGetCategories";
 import React from "react";
 
@@ -17,11 +18,7 @@ const ManageCategoriesPage = () => {
         <h1 className="h1-title-page">All Categories</h1>
         <CreateCategoryModal />
       </div>
-      <div className="flex flex-col gap-2">
-        {categories.map((cat) => (
-          <p key={cat._id}>{cat.name}</p>
-        ))}
-      </div>
+      <CategoriesTable data={categories} />
     </div>
   );
 };
