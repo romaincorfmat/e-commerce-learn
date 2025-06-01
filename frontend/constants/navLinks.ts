@@ -1,4 +1,4 @@
-export const NAV_LINKS = [
+export const NAV_LINKS_ADMIN = [
   {
     name: "Dashboard",
     href: "dashboard",
@@ -34,5 +34,28 @@ export const NAV_LINKS = [
   {
     name: "Users",
     href: "manage-users",
+  },
+];
+
+export const NAV_LINKS_CUSTOMER = [
+  {
+    name: "Products",
+    href: "products",
+  },
+  {
+    name: "Orders",
+    href: "orders",
+  },
+  {
+    name: "Profile",
+    href: "profile",
+  },
+  {
+    name: "Cart",
+    href: "cart",
+  },
+  {
+    name: "Wishlist",
+    href: "wishlist",
   },
 ];

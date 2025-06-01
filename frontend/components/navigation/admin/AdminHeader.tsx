@@ -8,9 +8,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { MenuIcon } from "lucide-react";
-import SignOutButton from "../buttons/SignOutButton";
-import LinkComponent from "./LinkComponent";
-import { NAV_LINKS } from "@/constants/navLinks";
+import SignOutButton from "../../buttons/SignOutButton";
+import LinkComponent from "../LinkComponent";
+import { NAV_LINKS_ADMIN } from "@/constants/navLinks";
 
 const AdminHeader = () => {
   const [open, setOpen] = useState(false);
@@ -30,7 +30,7 @@ const AdminHeader = () => {
         >
           <SheetTitle className="hidden">Mobile Navigation</SheetTitle>
           <div className="flex flex-col gap-4 py-2">
-            {NAV_LINKS.map((link) => (
+            {NAV_LINKS_ADMIN.map((link) => (
               <div key={link.href} onClick={() => setOpen(false)}>
                 <LinkComponent link={link} />
               </div>
