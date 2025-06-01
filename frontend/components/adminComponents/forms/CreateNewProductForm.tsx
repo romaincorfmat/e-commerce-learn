@@ -184,10 +184,7 @@ const CreateNewProductForm = ({ onSuccess }: Props) => {
                         : "Select Category"}
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    {...field}
-                    className="border border-green-500 w-full"
-                  >
+                  <DropdownMenuContent {...field}>
                     {!isPending && categories.length > 0 ? (
                       <>
                         <DropdownMenuLabel>Categories</DropdownMenuLabel>
