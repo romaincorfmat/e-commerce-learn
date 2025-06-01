@@ -9,15 +9,13 @@ interface AdminLayoutProps {
 
 const layout = ({ children }: AdminLayoutProps) => {
   return (
-    <RoleGuard allowedRoles={["customer"]}>
-      <div className="relative bg-gray-50 dark:bg-gray-900 ">
+    <RoleGuard allowedRoles={["customer", "admin"]}>
+      <div className="relative bg-gray-50 dark:bg-gray-900">
         <CustomerHeader />
         <div className="flex min-h-screen">
           <CustomerLeftSidebar />
-          <div className="mx-auto  py-8 pt-20 w-full px-12 max-md:px-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 w-full">
-              <div>{children}</div>
-            </div>
+          <div className="mx-auto py-14 w-full px-12 max-md:px-4">
+            <div>{children}</div>
           </div>
         </div>
       </div>

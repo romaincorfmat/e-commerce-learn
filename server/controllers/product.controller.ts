@@ -20,6 +20,16 @@ export async function createProduct(
     //   throw error;
     // }
 
+    // console.log("Request body:", req.body);
+
+    // const imageToUpload = req.body.imageUrl;
+    // console.log("Image URL to upload:", imageToUpload);
+    // if (!imageToUpload || typeof imageToUpload !== "string") {
+    // throw new CustomError("Image URL is required and must be a string", 400);
+    // }
+
+    // const imageUrl = await uploadImage(imageToUpload);
+
     const existingProduct = await Product.findOne({ slug: req.body.slug });
 
     const incomingVariants = req.body.variants || [];
@@ -65,7 +75,10 @@ export async function createProduct(
 
     const productSlug = generateSlug(req.body.name);
 
-    const newProduct = await Product.create({ ...req.body, slug: productSlug });
+    const newProduct = await Product.create({
+      ...req.body,
+      slug: productSlug,
+    });
 
     res.status(201).json({
       message: "Product created successfully",
@@ -428,6 +441,36 @@ export async function receiveStock(
       data: {
         product,
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getCategoryProducts(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const categoryId = req.params.category;
+    if (!categoryId) {
+      throw new CustomError("Category ID is required", 400);
+    }
+
+    const products = await Product.find({
+      categoryId,
+    })
+      .sort({ createdAt: -1 })
+      .limit(3);
+
+    if (!products || products.length === 0) {
+      throw new CustomError("No products found in this category", 404);
+    }
+
+    res.status(200).json({
+      message: "Products retrieved successfully",
+      products,
     });
   } catch (error) {
     next(error);

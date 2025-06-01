@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -95,15 +95,22 @@ export const columns: ColumnDef<Product>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(product._id)}
+              className="cursor-pointer"
             >
               Copy product ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Update Product</DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
+              Update Product
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
               <Link href={`/products/${product._id}`}>
                 View product details
               </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
+              <p className="font-semibold text-red-500">Delete Product</p>
+              <Trash2 className="text-red-500" />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

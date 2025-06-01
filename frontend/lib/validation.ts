@@ -26,6 +26,7 @@ export const CreateProductFormSchema = z.object({
     .number()
     .positive("Price must be a positive number")
     .min(0.01, "Price must be at least 0.01"),
+  imageUrl: z.string(),
   variants: z.array(
     z.object({
       sku: z.string().min(1, "Variant sku is required"),

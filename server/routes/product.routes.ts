@@ -10,6 +10,7 @@ import {
   sellProduct,
   receiveStock,
   getProductSku,
+  getCategoryProducts,
 } from "../controllers/product.controller";
 import adminMiddleware from "../middlewares/admin.middleware";
 
@@ -18,6 +19,8 @@ const productRouter = Router();
 productRouter.get("/", getProducts);
 
 productRouter.get("/:id", getProduct);
+
+productRouter.get("/category/:category", getCategoryProducts);
 
 productRouter.get("/sku/:sku", getProductSku);
 

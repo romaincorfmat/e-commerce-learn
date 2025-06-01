@@ -5,6 +5,7 @@ export interface IProduct {
   slug: string;
   description: string;
   price: number;
+  imageUrl: string;
   categoryId: Types.ObjectId;
   variants: [
     {
@@ -46,6 +47,18 @@ const ProductSchema = new mongoose.Schema<IProduct>(
       type: Number,
       required: true,
       min: 0,
+    },
+    imageUrl: {
+      type: String,
+      required: true,
+      trim: true,
+      validate: {
+        validator: (v: string) => {
+          return /^(https?:\/\/.*\.(png|jpg|jpeg|gif|webp))$/i.test(v);
+        },
+        message:
+          "Image URL must be a valid URL ending with png, jpg, jpeg, gif, or webp",
+      },
     },
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,

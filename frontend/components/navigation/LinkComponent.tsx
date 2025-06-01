@@ -10,12 +10,13 @@ interface Props {
     name: string;
     href: string;
   };
+  route?: string;
 }
 
-const LinkComponent = ({ link }: Props) => {
+const LinkComponent = ({ link, route }: Props) => {
   const pathname = usePathname();
   const isActive = (href: string) => {
-    return pathname === `/admin/${href}` || pathname.startsWith(`/${href}/`);
+    return pathname === `/${route}/${href}` || pathname.startsWith(`/${href}`);
   };
 
   return (

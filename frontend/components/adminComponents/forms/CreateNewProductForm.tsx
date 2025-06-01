@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { CreateProductFormSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -28,12 +28,30 @@ import { PlusCircle, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import useCreateProduct from "@/hooks/products/useCreateProduct";
 import { toast } from "sonner";
+import { uploadImage } from "@/lib/actions/uploadImageClooudinary";
 
 interface Props {
   onSuccess: () => void;
 }
 
 const CreateNewProductForm = ({ onSuccess }: Props) => {
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  // const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+    console.log("Selected file:", file);
+  };
+
   const { data, isPending } = useGetCategories();
   const categories = data?.data || [];
 
@@ -44,6 +62,7 @@ const CreateNewProductForm = ({ onSuccess }: Props) => {
       description: "",
       categoryId: "",
       price: 0,
+      imageUrl: "",
       variants: [
         {
           sku: "",
@@ -70,12 +89,34 @@ const CreateNewProductForm = ({ onSuccess }: Props) => {
     console.log("Form data Submitted", data);
 
     try {
+      // First check if we have an image to upload
+      if (!imageFile) {
+        toast.error("Please select an image file");
+        return;
+      }
+
+      setIsUploading(true);
+
+      // Upload the image to Cloudinary first
+      let imageUrl = "";
+      try {
+        imageUrl = await uploadImage(imageFile);
+        console.log("Cloudinary image URL:", imageUrl);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        toast.error("Failed to upload image");
+        setIsUploading(false);
+        return;
+      }
+
+      // Then create the product with the Cloudinary URL
       createProductMutation.mutate(
         {
           name: data.name,
           description: data.description,
           categoryId: data.categoryId,
           price: data.price,
+          imageUrl: imageUrl,
           variants: data.variants.map((variant) => ({
             sku: variant.sku,
             stockLevel: variant.stockLevel,
@@ -85,22 +126,26 @@ const CreateNewProductForm = ({ onSuccess }: Props) => {
             },
           })),
         },
-
         {
           onSuccess: () => {
             toast.success("Product created successfully");
             form.reset();
+            setImageFile(null);
+            // setImagePreview(null);
+            setIsUploading(false);
             onSuccess();
           },
           onError: (error) => {
             toast.error("Failed to create product");
             console.error("Error creating product:", error);
+            setIsUploading(false);
           },
         }
       );
     } catch (error) {
       console.error("Error creating product:", error);
       toast.error("Failed to create product");
+      setIsUploading(false);
     }
   };
 
@@ -162,6 +207,39 @@ const CreateNewProductForm = ({ onSuccess }: Props) => {
                   className="w-full"
                   placeholder="Enter price"
                 />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="imageUrl"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-lg">Product Image</FormLabel>
+              <FormControl>
+                <div>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    className="no-focus outline-none bg-transparent shadow-none focus-visible:ring-2 focus-visible:ring-offset-0 focus-visible:ring-blue-600"
+                    onChange={handleFileChange}
+                    disabled={isUploading}
+                  />
+                  {/* {imagePreview && (
+                    <div className="mt-2">
+                      <p>{imageFile?.name}</p>
+                      <img
+                        src={imagePreview}
+                        alt="Product preview"
+                        className="mt-2 max-h-40 object-contain"
+                      />
+                    </div>
+                  )} */}
+                  <Input type="hidden" {...field} />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -316,8 +394,8 @@ const CreateNewProductForm = ({ onSuccess }: Props) => {
           </div>
         </div>
 
-        <Button type="submit" className="w-full">
-          Create Product
+        <Button type="submit" className="w-full" disabled={isUploading}>
+          {isUploading ? "Uploading..." : "Create Product"}
         </Button>
       </form>
     </Form>

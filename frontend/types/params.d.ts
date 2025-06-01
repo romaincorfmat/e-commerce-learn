@@ -2,6 +2,7 @@ interface ProductParams {
   name: string;
   description: string;
   price: number;
+  imageUrl: string;
   categoryId: string;
   variants: {
     sku: string;
