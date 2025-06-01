@@ -1,7 +1,6 @@
 import useDeleteProduct from "@/hooks/products/useDeleteProducts";
 import { Trash2 } from "lucide-react";
 import React from "react";
-import { toast } from "sonner";
 
 interface Props {
   productId: string;
@@ -11,13 +10,7 @@ const DeleteProductButton = ({ productId }: Props) => {
   const deleteProductMutation = useDeleteProduct();
 
   const handleAction = async (productId: string) => {
-    try {
-      deleteProductMutation.mutate(productId);
-      console.log("Delete product result: ", deleteProductMutation);
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to delete product");
-    }
+    deleteProductMutation.mutate(productId);
   };
   return (
     <button
