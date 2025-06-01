@@ -1,10 +1,16 @@
+interface Category {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
 interface Product {
   _id: string;
   name: string;
   slug: string;
   description: string;
   price: number;
-  categoryId: string;
+  categoryId: Category;
   variants: {
     sku: string;
     stockLevel?: number;
