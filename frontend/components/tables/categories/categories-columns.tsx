@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import CategoryItemCount from "./CategoryItemCount";
 
 export const columns: ColumnDef<Category>[] = [
   {
@@ -28,8 +29,17 @@ export const columns: ColumnDef<Category>[] = [
   },
   {
     accessorKey: "number-items-in-category",
-    header: "Number of Items",
-    cell: () => <p className="text-red-500 font-bold">To Implement</p>,
+    header: "Items in Cat",
+    cell: ({ row }) => {
+      const category = row.original;
+
+      return (
+        <div className="flex items-center gap-2">
+          <CategoryItemCount categoryId={category._id} />
+          <span className="text-muted-foreground">Items</span>
+        </div>
+      );
+    },
   },
   {
     id: "actions",

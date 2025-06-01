@@ -118,8 +118,11 @@ export async function getProducts(
       ];
     }
 
+    if (req.query.categoryId) {
+      filterQuery.categoryId = req.query.categoryId;
+    }
+
     const products = await Product.find(filterQuery).populate("categoryId");
-    // .limit(2);
 
     if (!products || products.length === 0) {
       throw new CustomError("No products found", 404);
