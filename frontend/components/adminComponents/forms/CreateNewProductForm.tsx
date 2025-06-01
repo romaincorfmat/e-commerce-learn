@@ -26,8 +26,14 @@ import { Button } from "@/components/ui/button";
 
 import { PlusCircle, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import useCreateProduct from "@/hooks/products/useCreateProduct";
+import { toast } from "sonner";
 
-const CreateNewProductForm = () => {
+interface Props {
+  onSuccess: () => void;
+}
+
+const CreateNewProductForm = ({ onSuccess }: Props) => {
   const { data, isPending } = useGetCategories();
   const categories = data?.data || [];
 
@@ -56,10 +62,46 @@ const CreateNewProductForm = () => {
     name: "variants",
   });
 
+  const createProductMutation = useCreateProduct();
+
   const handleSubmit = async (
     data: z.infer<typeof CreateProductFormSchema>
   ) => {
     console.log("Form data Submitted", data);
+
+    try {
+      createProductMutation.mutate(
+        {
+          name: data.name,
+          description: data.description,
+          categoryId: data.categoryId,
+          price: data.price,
+          variants: data.variants.map((variant) => ({
+            sku: variant.sku,
+            stockLevel: variant.stockLevel,
+            attributes: {
+              color: variant.attributes.color,
+              size: variant.attributes.size,
+            },
+          })),
+        },
+
+        {
+          onSuccess: () => {
+            toast.success("Product created successfully");
+            form.reset();
+            onSuccess();
+          },
+          onError: (error) => {
+            toast.error("Failed to create product");
+            console.error("Error creating product:", error);
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error creating product:", error);
+      toast.error("Failed to create product");
+    }
   };
 
   const addVariant = () => {

@@ -16,6 +16,22 @@ export const NAV_LINKS = [
     href: "manage-products",
   },
   {
+    name: "Categories",
+    href: "manage-categories",
+  },
+  {
+    name: "Suppliers",
+    href: "manage-suppliers",
+  },
+  {
+    name: "Customers",
+    href: "manage-customers",
+  },
+  {
+    name: "Reports",
+    href: "reports",
+  },
+  {
     name: "Users",
     href: "manage-users",
   },

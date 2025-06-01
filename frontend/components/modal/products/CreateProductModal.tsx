@@ -18,7 +18,7 @@ const CreateProductModal = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogTitle className="hidden">Create Product</DialogTitle>
-        <CreateNewProductForm />
+        <CreateNewProductForm onSuccess={() => setIsOpen(false)} />
       </DialogContent>
     </Dialog>
   );

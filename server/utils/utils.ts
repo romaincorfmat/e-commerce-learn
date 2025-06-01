@@ -18,3 +18,11 @@ export const generatePassword = (length: number = 8): string => {
   }
   return password;
 };
+
+export const generateSlug = (name: string): string => {
+  // Generate a URL-friendly slug from the given name
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with hyphens
+    .replace(/^-|-$/g, ""); // Remove leading and trailing hyphens
+};

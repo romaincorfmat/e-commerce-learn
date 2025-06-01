@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { CustomError } from "../types/error";
 import { Product } from "../database/models";
 import { FilterQuery } from "mongoose";
+import { generateSlug } from "../utils/utils";
 
 export async function createProduct(
   req: Request,
@@ -62,7 +63,9 @@ export async function createProduct(
       return;
     }
 
-    const newProduct = await Product.create({ ...req.body });
+    const productSlug = generateSlug(req.body.name);
+
+    const newProduct = await Product.create({ ...req.body, slug: productSlug });
 
     res.status(201).json({
       message: "Product created successfully",
@@ -115,9 +118,8 @@ export async function getProducts(
       ];
     }
 
-    const products = await Product.find(filterQuery)
-      .populate("categoryId")
-      .limit(2);
+    const products = await Product.find(filterQuery).populate("categoryId");
+    // .limit(2);
 
     if (!products || products.length === 0) {
       throw new CustomError("No products found", 404);
