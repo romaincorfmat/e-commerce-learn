@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, Trash2 } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import DeleteProductButton from "@/components/adminComponents/buttons/DeleteProductButton";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -109,8 +110,7 @@ export const columns: ColumnDef<Product>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer">
-              <p className="font-semibold text-red-500">Delete Product</p>
-              <Trash2 className="text-red-500" />
+              <DeleteProductButton productId={product._id} />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

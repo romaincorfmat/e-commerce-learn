@@ -121,12 +121,18 @@ export async function getCategoryProducts(
   }
 }
 
+/**
+ * Deletes a product by its ID.
+ *
+ * @param productId - The unique identifier of the product to delete.
+ * @returns A promise resolving to an API response indicating whether the product was deleted.
+ */
 export async function deleteProduct(
   productId: string
 ): Promise<APIResponse<{ deleted: boolean }>> {
   try {
     const response = await fetch(
-      `/${API_BASE_URL}/api/v1/products/${productId}`,
+      `${API_BASE_URL}/api/v1/products/${productId}`,
       {
         method: "DELETE",
         credentials: "include",
