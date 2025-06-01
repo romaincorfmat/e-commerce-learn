@@ -15,7 +15,7 @@ const ProductsPage = () => {
   const techProducts = techData?.data || [];
   const furnitureProducts = furnitureData?.data || [];
   return (
-    <div className="flex flex-col  justify-center max-w-7xl mx-auto px-4 py-8 gap-8">
+    <div className="flex flex-col  justify-center max-w-7xl mx-auto px-4 gap-8">
       <h1 className="h1-title-page">Browse Products</h1>
       <section className="flex flex-col gap-3">
         <Link

@@ -14,7 +14,7 @@ const layout = ({ children }: AdminLayoutProps) => {
         <CustomerHeader />
         <div className="flex min-h-screen">
           <CustomerLeftSidebar />
-          <div className="mx-auto py-14 w-full px-12 max-md:px-4">
+          <div className="mx-auto  w-full px-12 max-md:px-4 py-24">
             <div>{children}</div>
           </div>
         </div>
