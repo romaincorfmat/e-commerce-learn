@@ -126,7 +126,7 @@ export async function deleteProduct(
 ): Promise<APIResponse<{ deleted: boolean }>> {
   try {
     const response = await fetch(
-      `/${API_BASE_URL}/api/v1/products/${productId}`,
+      `${API_BASE_URL}/api/v1/products/${productId}`,
       {
         method: "DELETE",
         credentials: "include",
