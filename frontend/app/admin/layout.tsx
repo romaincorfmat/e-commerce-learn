@@ -1,4 +1,6 @@
 import RoleGuard from "@/components/auth/RoleGuard";
+import AdminHeader from "@/components/navigation/AdminHeader";
+import LeftSidebar from "@/components/navigation/LeftSidebar";
 import React, { ReactNode } from "react";
 
 interface AdminLayoutProps {
@@ -8,11 +10,14 @@ interface AdminLayoutProps {
 const layout = ({ children }: AdminLayoutProps) => {
   return (
     <RoleGuard allowedRoles={["admin"]}>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <div className="container mx-auto px-4 py-8">
-          <h1 className="text-2xl font-bold mb-6">Admin Only</h1>
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            {children}
+      <div className="relative bg-gray-50 dark:bg-gray-900 ">
+        <AdminHeader />
+        <div className="flex min-h-screen">
+          <LeftSidebar />
+          <div className="mx-auto  py-8 pt-20 w-full px-12 max-md:px-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 w-full">
+              {children}
+            </div>
           </div>
         </div>
       </div>

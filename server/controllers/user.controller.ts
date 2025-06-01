@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { User } from "../database/models";
 import { generateEmail, generatePassword } from "../utils/utils";
 import bcrypt from "bcrypt";
+import { CustomError } from "../types/error";
 
 export async function getAllUsers(req: Request, res: Response) {
   try {
@@ -67,6 +68,9 @@ export async function createUser(
     const email = generateEmail(name);
     const password = generatePassword();
 
+    console.log("Generated email:", email);
+    console.log("Generated password:", password);
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -74,7 +78,7 @@ export async function createUser(
       name,
       email,
       password: hashedPassword,
-      role: role, // Default to 'user' if no role is provided
+      role: role,
     });
 
     res.status(201).json({
@@ -111,34 +115,35 @@ export async function getUserProfile(
   }
 }
 
-export async function deleteUser(req: Request, res: Response) {
+export async function deleteUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const userId = req.params.id;
-    const loggedInUser = req.user?.id;
+    const loggedInUser = req.user;
 
     if (!userId) {
-      res.status(404).json({ message: "User not found" });
-      return;
+      throw new CustomError("User not found", 404);
     }
 
-    if (userId !== loggedInUser) {
-      res
-        .status(400)
-        .json({ message: "You cannot delete someone else account." });
-      return;
+    if (userId === loggedInUser.id) {
+      throw new CustomError("You cannot delete yourself.", 403);
+    }
+
+    if (userId !== loggedInUser.id && loggedInUser.role !== "admin") {
+      throw new CustomError("Only Admin can delete user", 403);
     }
 
     const userToDelete = await User.findByIdAndDelete(userId);
-
     res.status(200).json({
       success: true,
       message: "User deleted successfully",
       data: userToDelete,
     });
   } catch (error) {
-    console.error("Error deleting user:", error);
-    res.status(500).json({ message: "Internal server error" });
-    return;
+    next(error);
   }
 }
 

@@ -22,6 +22,6 @@ userRouter.post("/", authorize, adminMiddleware, createUser);
 
 userRouter.put("/:id", authorize, updateUserInfo);
 
-userRouter.delete("/:id", authorize, deleteUser);
+userRouter.delete("/:id", authorize, adminMiddleware, deleteUser);
 
 export default userRouter;

@@ -19,7 +19,7 @@ export async function getLoggedInUser(): Promise<APIResponse<User>> {
       return {
         success: false,
         message: `Failed to fetch user: ${response.status} ${response.statusText}`,
-        error: "API request failed",
+        error: { message: "API request failed" },
       };
     }
 
@@ -35,7 +35,9 @@ export async function getLoggedInUser(): Promise<APIResponse<User>> {
     return {
       success: false,
       message: "Internal server error",
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: {
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
     };
   }
 }
@@ -59,7 +61,7 @@ export async function getAllUsers(): Promise<APIResponse<User[]>> {
       return {
         success: false,
         message: `Failed to fetch users: ${response.status} ${response.statusText}`,
-        error: "API request failed",
+        error: { message: "API request failed" },
       };
     }
 
@@ -74,7 +76,9 @@ export async function getAllUsers(): Promise<APIResponse<User[]>> {
     return {
       success: false,
       message: "Internal server error",
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: {
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
     };
   }
 }
@@ -111,6 +115,46 @@ export async function createUser({
       success: true,
       message: "User created successfully",
       data: data.data || data,
+    };
+  } catch (error) {
+    console.error("Error creating user:", error);
+    throw new Error(
+      error instanceof Error ? error.message : "Unknown error occurred"
+    );
+  }
+}
+
+export async function deleteUser(
+  userId: string
+): Promise<APIResponse<{ deleted: boolean }>> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/v1/users/${userId}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: { "Content-type": "application/json" },
+    });
+
+    console.log("Delete Response: ", response);
+
+    if (!response.ok) {
+      console.error(
+        "Failed to delete user:",
+        response.status,
+        response.statusText
+      );
+      throw new Error(
+        `Failed to delete user: ${response.status} ${response.statusText}`
+      );
+    }
+
+    // const data = await response.json();
+
+    return {
+      success: true,
+      message: "User deleted successfully",
+      data: {
+        deleted: true,
+      },
     };
   } catch (error) {
     console.error("Error creating user:", error);

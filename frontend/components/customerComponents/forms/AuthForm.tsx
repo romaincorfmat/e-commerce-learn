@@ -77,7 +77,7 @@ export function AuthForm<T extends FieldValues>({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
         <div>
-          <h1 className="text-xl font-bold">
+          <h1 className="h1-title-page">
             {type === "SIGN_IN"
               ? "Welcome to ShopOnline"
               : "Welcome back to ShopOnline"}

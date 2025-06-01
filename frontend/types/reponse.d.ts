@@ -5,9 +5,20 @@ interface AuthResponse {
   error?: string;
 }
 
-interface APIResponse<T> {
+// interface APIResponse<T> {
+//   success: boolean;
+//   message: string;
+//   data?: T;
+//   error?: string;
+// }
+
+type APIResponse<T = null> = {
   success: boolean;
-  message: string;
+  message?: string;
   data?: T;
-  error?: string;
-}
+  error?: {
+    message: string;
+    details?: Record<string, string[]>;
+  };
+  status?: number;
+};

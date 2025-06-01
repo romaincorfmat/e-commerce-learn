@@ -15,10 +15,14 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { CreateUserFormSchema } from "@/lib/validation";
-import { createUser } from "@/app/api/user/route";
 import { toast } from "sonner";
+import useCreateUser from "@/hooks/users/useCreateUser";
 
-export function CreateUserForm() {
+interface Props {
+  onSuccess: () => void;
+}
+
+export function CreateUserForm({ onSuccess }: Props) {
   const form = useForm<z.infer<typeof CreateUserFormSchema>>({
     resolver: zodResolver(CreateUserFormSchema),
     defaultValues: {
@@ -27,15 +31,25 @@ export function CreateUserForm() {
     },
   });
 
+  const createUserMutation = useCreateUser();
+
   const handleSubmit = async (data: z.infer<typeof CreateUserFormSchema>) => {
     console.log("Form data Submitted", data);
     try {
-      const result = await createUser({
-        formData: { name: data.name, role: data.role },
-      });
-      if (result.success) {
-        toast.success("User created successfully");
-      }
+      createUserMutation.mutate(
+        { formData: { name: data.name, role: data.role } },
+        {
+          onSuccess: () => {
+            toast.success("User created successfully");
+            form.reset();
+            onSuccess();
+          },
+          onError: (error) => {
+            toast.error("Failed to create user");
+            console.error("Error creating user:", error);
+          },
+        }
+      );
     } catch (error) {
       console.error("Error creating user:", error);
     }

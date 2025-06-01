@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
 import { UserProvider } from "@/contexts/UserContext";
+import TanstackQueryProvider from "@/contexts/TanstackQueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,8 +31,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <UserProvider>{children}</UserProvider>
-        <Toaster richColors closeButton />
+        <TanstackQueryProvider>
+          <UserProvider>{children}</UserProvider>
+          <Toaster richColors closeButton />
+        </TanstackQueryProvider>
       </body>
     </html>
   );

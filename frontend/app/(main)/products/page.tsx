@@ -1,4 +1,3 @@
-import { Product } from "@/types/global";
 import Link from "next/link";
 import React from "react";
 

@@ -120,3 +120,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .h1-title-page {
+    @apply text-xl font-semibold tracking-tight;
+  }
+}
