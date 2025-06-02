@@ -11,46 +11,35 @@ interface Props {
     name: string;
     href: string;
   };
-  route?: string;
+  isAdmin?: boolean;
 }
 
-const LinkComponent = ({ link, route }: Props) => {
+const LinkComponent = ({ link, isAdmin = false }: Props) => {
   const pathname = usePathname();
   const { user } = useUser();
 
   const isActive = () => {
     const fullHref = constructHref();
-
-    if (route) {
-      return (
-        pathname === fullHref ||
-        (pathname.startsWith(fullHref) &&
-          pathname.charAt(fullHref.length) === "/")
-      );
-    }
-
-    return (
-      pathname === fullHref ||
-      pathname.startsWith(fullHref) ||
-      (pathname.startsWith(fullHref) &&
-        pathname.charAt(fullHref.length) === "/")
-    );
+    return pathname === fullHref || pathname.startsWith(fullHref);
   };
 
   const constructHref = () => {
     // Handle special case for cart route
     if (link.href.includes("carts/userId") && user) {
-      return link.href.replace("userId", user._id);
+      return `/${link.href.replace("userId", user._id)}`;
     }
 
+    // If href already starts with /, return as is
     if (link.href.startsWith("/")) {
       return link.href;
     }
 
-    if (route) {
-      return `/${route}/${link.href}`;
+    // For admin routes, prepend with /admin/
+    if (isAdmin) {
+      return `/admin/${link.href}`;
     }
 
+    // For regular routes, just prepend with /
     return `/${link.href}`;
   };
 

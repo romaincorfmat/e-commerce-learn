@@ -1,4 +1,4 @@
-import { createShoppingCart } from "@/app/api/carts/route";
+import { createAndUpdateShoppingCart } from "@/app/api/carts/route";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -6,7 +6,7 @@ const useCreateCart = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: createShoppingCart,
+    mutationFn: createAndUpdateShoppingCart,
     onSuccess: (response) => {
       if (response.success && response.data) {
         const cartId = response.data._id;
@@ -15,8 +15,8 @@ const useCreateCart = () => {
         queryClient.invalidateQueries({
           queryKey: ["cart", cartId],
         });
+        toast.success(response.message || "Cart created successfully");
       }
-      toast.success(response.message || "Cart created successfully");
     },
     onError: (error) => {
       const errorMessage =
