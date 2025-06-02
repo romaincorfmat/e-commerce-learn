@@ -13,7 +13,7 @@ const shoppingCartRouter = Router();
 shoppingCartRouter.get("/", authorize, customerMiddleware, getShoppingCarts);
 
 shoppingCartRouter.get(
-  "/:id",
+  "/:userId",
   authorize,
   customerMiddleware,
   getShoppingCartByUserId

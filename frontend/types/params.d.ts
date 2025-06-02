@@ -13,3 +13,14 @@ interface ProductParams {
     };
   }[];
 }
+
+interface ShoppingCartParams {
+  userId: string;
+  items: {
+    productId: string;
+    productVariant: {
+      productSku: string;
+      quantity: number;
+    };
+  }[];
+}

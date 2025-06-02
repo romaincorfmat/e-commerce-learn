@@ -134,7 +134,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
       message: "User signed in successfully",
       data: {
         user,
-        // , token
+        token,
       },
     });
   } catch (error) {

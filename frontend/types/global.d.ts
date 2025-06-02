@@ -31,3 +31,18 @@ interface User {
   email: string;
   role: "admin" | "user" | "customer";
 }
+
+interface Cart {
+  _id: string;
+  userId: string;
+  items: {
+    productId: string;
+    productVariant: {
+      productSku: string;
+      quantity: number;
+      unitPrice: number;
+    };
+    totalPrice: number;
+  }[];
+  totalPrice?: number; // Optional, can be calculated
+}

@@ -39,6 +39,10 @@ export const NAV_LINKS_ADMIN = [
 
 export const NAV_LINKS_CUSTOMER = [
   {
+    name: "Home",
+    href: "home",
+  },
+  {
     name: "Products",
     href: "products",
   },
@@ -52,7 +56,7 @@ export const NAV_LINKS_CUSTOMER = [
   },
   {
     name: "Cart",
-    href: "cart",
+    href: "carts/userId",
   },
   {
     name: "Wishlist",

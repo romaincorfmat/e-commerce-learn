@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import {
   DefaultValues,
   FieldValues,
@@ -40,6 +40,7 @@ export function AuthForm<T extends FieldValues>({
 }: Props<T>) {
   const { fetchUserData } = useUser();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -48,6 +49,7 @@ export function AuthForm<T extends FieldValues>({
 
   const handleSubmit: SubmitHandler<T> = async (data) => {
     try {
+      setIsLoading(true);
       console.log("Form data Submitted", data);
       const response = await onSubmit(data);
 
@@ -61,7 +63,7 @@ export function AuthForm<T extends FieldValues>({
         );
 
         await fetchUserData();
-        router.push("/dashboard");
+        router.push("/home");
       } else {
         toast.error(
           response.message || "Authentication failed. Please try again."
@@ -70,6 +72,8 @@ export function AuthForm<T extends FieldValues>({
     } catch (error) {
       console.error("Authentication error:", error);
       toast.error("Authentication failed. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -111,7 +115,9 @@ export function AuthForm<T extends FieldValues>({
             )}
           />
         ))}
-        <Button className="w-full">Submit</Button>
+        <Button className="w-full" disabled={isLoading}>
+          Submit
+        </Button>
         {type === "SIGN_IN" ? (
           <>
             <p>

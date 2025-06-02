@@ -4,6 +4,7 @@ import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { useUser } from "@/contexts/UserContext";
 
 interface Props {
   link: {
@@ -15,6 +16,7 @@ interface Props {
 
 const LinkComponent = ({ link, route }: Props) => {
   const pathname = usePathname();
+  const { user } = useUser();
 
   const isActive = () => {
     const fullHref = constructHref();
@@ -36,6 +38,11 @@ const LinkComponent = ({ link, route }: Props) => {
   };
 
   const constructHref = () => {
+    // Handle special case for cart route
+    if (link.href.includes("carts/userId") && user) {
+      return link.href.replace("userId", user._id);
+    }
+
     if (link.href.startsWith("/")) {
       return link.href;
     }

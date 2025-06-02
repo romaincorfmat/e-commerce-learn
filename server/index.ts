@@ -12,7 +12,7 @@ import shoppingCartRouter from "./routes/shoppingCart.routes";
 import loggerMiddleware from "./middlewares/logger.middleware";
 
 const app = express();
-const port = PORT || 5000;
+const port = PORT || 8000;
 
 app.use(express.json());
 app.use(
