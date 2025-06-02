@@ -16,14 +16,23 @@ interface Props {
 const LinkComponent = ({ link, route }: Props) => {
   const pathname = usePathname();
 
-  const isActive = (href: string) => {
+  const isActive = () => {
+    const fullHref = constructHref();
+
     if (route) {
       return (
-        pathname === `/${route}/${href}` ||
-        pathname.startsWith(`/${route}/${href}`)
+        pathname === fullHref ||
+        (pathname.startsWith(fullHref) &&
+          pathname.charAt(fullHref.length) === "/")
       );
     }
-    return pathname === `/${href}` || pathname.startsWith(`/${href}`);
+
+    return (
+      pathname === fullHref ||
+      pathname.startsWith(fullHref) ||
+      (pathname.startsWith(fullHref) &&
+        pathname.charAt(fullHref.length) === "/")
+    );
   };
 
   const constructHref = () => {
@@ -43,7 +52,9 @@ const LinkComponent = ({ link, route }: Props) => {
       href={constructHref()}
       className={cn(
         "px-2 py-1 rounded-sm hover:bg-white transition-colors flex items-center justify-between text-sm hover:text-black/60",
-        isActive(link.href) ? "bg-white font-semibold" : "text-gray-600"
+        isActive()
+          ? "bg-white font-semibold"
+          : "text-gray-600 hover:text-gray-900"
       )}
     >
       {link.name}
