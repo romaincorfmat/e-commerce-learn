@@ -135,7 +135,9 @@ export async function getProducts(
       filterQuery.categoryId = req.query.categoryId;
     }
 
-    const products = await Product.find(filterQuery).populate("categoryId");
+    const products = await Product.find(filterQuery)
+      .sort({ createdAt: -1 })
+      .populate("categoryId");
 
     if (!products || products.length === 0) {
       throw new CustomError("No products found", 404);

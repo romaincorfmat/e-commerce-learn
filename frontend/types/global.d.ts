@@ -4,6 +4,15 @@ interface Category {
   slug: string;
 }
 
+interface Variant {
+  sku: string;
+  stockLevel: number;
+  attributes: {
+    color: string;
+    size: string;
+  };
+}
+
 interface Product {
   _id: string;
   name: string;
@@ -12,14 +21,7 @@ interface Product {
   price: number;
   imageUrl: string;
   categoryId?: Category;
-  variants: {
-    sku: string;
-    stockLevel?: number;
-    attributes: {
-      color?: string;
-      size?: string;
-    };
-  }[];
+  variants: Variant[];
   deleted: boolean; // Soft delete flag
 }
 
