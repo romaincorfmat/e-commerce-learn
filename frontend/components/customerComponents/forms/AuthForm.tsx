@@ -32,6 +32,18 @@ interface Props<T extends FieldValues> {
   onSubmit: (data: T) => Promise<AuthResponse>;
 }
 
+/**
+ * Renders a generic authentication form for sign-in or sign-up, supporting dynamic fields and validation.
+ *
+ * Displays form fields based on the provided default values and validates input using the given Zod schema. Handles form submission, displays success or error notifications, refreshes user data on successful authentication, and redirects to the home page.
+ *
+ * @param type - Specifies whether the form is for sign-in or sign-up.
+ * @param defaultValues - Initial values for the form fields.
+ * @param schema - Zod schema used for form validation.
+ * @param onSubmit - Async function called with form data on submission, expected to return an authentication response.
+ *
+ * @returns The rendered authentication form component.
+ */
 export function AuthForm<T extends FieldValues>({
   type,
   defaultValues,
