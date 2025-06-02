@@ -15,13 +15,32 @@ interface Props {
 
 const LinkComponent = ({ link, route }: Props) => {
   const pathname = usePathname();
+
   const isActive = (href: string) => {
-    return pathname === `/${route}/${href}` || pathname.startsWith(`/${href}`);
+    if (route) {
+      return (
+        pathname === `/${route}/${href}` ||
+        pathname.startsWith(`/${route}/${href}`)
+      );
+    }
+    return pathname === `/${href}` || pathname.startsWith(`/${href}`);
+  };
+
+  const constructHref = () => {
+    if (link.href.startsWith("/")) {
+      return link.href;
+    }
+
+    if (route) {
+      return `/${route}/${link.href}`;
+    }
+
+    return `/${link.href}`;
   };
 
   return (
     <Link
-      href={link.href}
+      href={constructHref()}
       className={cn(
         "px-2 py-1 rounded-sm hover:bg-white transition-colors flex items-center justify-between text-sm hover:text-black/60",
         isActive(link.href) ? "bg-white font-semibold" : "text-gray-600"

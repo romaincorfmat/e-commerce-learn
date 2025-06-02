@@ -41,6 +41,47 @@ export async function GetAllProducts(): Promise<APIResponse<Product[]>> {
   }
 }
 
+export async function getProductById(
+  productId: string
+): Promise<APIResponse<Product>> {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/api/v1/products/${productId}`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: `Failed to fetch product: ${response.status} ${response.statusText}`,
+        error: { message: "API request failed" },
+      };
+    }
+
+    const data = await response.json();
+
+    return {
+      success: true,
+      message: "Product fetched successfully",
+      data: data.product,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Internal server error",
+      error: {
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
+    };
+  }
+}
+
 export async function createProduct(
   formData: ProductParams
 ): Promise<APIResponse<Product>> {
