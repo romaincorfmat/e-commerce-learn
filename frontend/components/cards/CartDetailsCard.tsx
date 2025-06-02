@@ -12,11 +12,10 @@ interface Props {
       unitPrice: number;
     };
   };
-  index: number;
 }
 
 const CartDetailsCard = ({ item }: Props) => {
-  const { data } = useGetProduct(item.productId);
+  const { data, isLoading, error } = useGetProduct(item.productId);
 
   const productData = data?.data;
 
@@ -27,12 +26,17 @@ const CartDetailsCard = ({ item }: Props) => {
   const productImage = productData.imageUrl;
 
   return (
-    <div
-      key={item.productVariant.productSku}
-      className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-4 border-t my-2 md:my-4 pt-2"
-    >
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-4 border-t my-2 md:my-4 pt-2">
       <div className="flex items-center">
-        {productImage ? (
+        {isLoading ? (
+          <div className="h-10 w-10 md:h-12 md:w-12 rounded-md bg-gray-300 animate-pulse">
+            {" "}
+          </div>
+        ) : error ? (
+          <div className="h-10 w-10 md:h-12 md:w-12 rounded-md bg-gray-300">
+            {" "}
+          </div>
+        ) : productImage && !error && !isLoading ? (
           <Image
             src={productImage}
             width={36}

@@ -33,7 +33,7 @@ export async function getShoppingCarts(
 
     res.status(200).json({
       message: "Shopping cart fetched successfully",
-      data: shoppingCarts,
+      cart: shoppingCarts,
     });
   } catch (error) {
     next(error);
@@ -83,7 +83,7 @@ export async function createShoppingCart(
 
     res.status(200).json({
       message: "Shopping cart updated successfully",
-      data: newOrUpdatedCart,
+      cart: newOrUpdatedCart,
     });
   } catch (error) {
     next(error);
@@ -128,7 +128,7 @@ export async function deleteShoppingCart(
     const deletedCart = await deleteCart(userId);
     res.status(200).json({
       message: "Shopping cart deleted successfully",
-      data: deletedCart,
+      cart: deletedCart,
     });
   } catch (error) {
     next(error);
@@ -161,7 +161,7 @@ export async function getShoppingCartByUserId(
 
     res.status(200).json({
       message: "Shopping cart fetched successfully",
-      data: userShoppingCart,
+      cart: userShoppingCart,
     });
   } catch (error) {
     next(error);

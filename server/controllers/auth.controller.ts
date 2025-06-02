@@ -134,7 +134,9 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
       message: "User signed in successfully",
       data: {
         user,
-        token,
+        // For debugging purposes, you can include the token in the response
+        // However, in production, it's better to avoid sending the token in the response body
+        // token,
       },
     });
   } catch (error) {

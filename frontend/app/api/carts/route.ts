@@ -69,7 +69,7 @@ export async function getShoppingCartByUserId(
     return {
       success: true,
       message: "Shopping cart fetched successfully",
-      data: data.data,
+      data: data.cart,
     };
   } catch (error) {
     return {

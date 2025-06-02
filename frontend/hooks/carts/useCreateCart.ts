@@ -10,9 +10,12 @@ const useCreateCart = () => {
     onSuccess: (response) => {
       if (response.success && response.data) {
         const cartId = response.data._id;
+
         queryClient.setQueryData(["cart", cartId], response.data);
+        queryClient.invalidateQueries({
+          queryKey: ["cart", cartId],
+        });
       }
-      queryClient.invalidateQueries({ queryKey: ["cart", response.data?._id] });
       toast.success(response.message || "Cart created successfully");
     },
     onError: (error) => {

@@ -24,7 +24,7 @@ const ShoppingCartPage = () => {
   const cartData = data?.data;
 
   const cartTotalPrice = cartData?.items
-    .reduce((total, item) => total + item.totalPrice, 0)
+    .reduce((total, item) => total + item.totalPrice || 0, 0)
     .toFixed(2);
 
   console.log("Cart Total Price:", cartTotalPrice);
@@ -33,12 +33,8 @@ const ShoppingCartPage = () => {
     <div className="flex flex-col gap-4">
       <div className="border p-6">
         <h1 className="h1-title-page">Your Cart</h1>
-        {cartData?.items.map((item, index) => (
-          <CartDetailsCard
-            key={item.productVariant.productSku}
-            item={item}
-            index={index}
-          />
+        {cartData?.items.map((item) => (
+          <CartDetailsCard key={item.productVariant.productSku} item={item} />
         ))}
         <div className="flex justify-end gap-4 items-center mt-4">
           <p className="text-lg">Total: </p>
