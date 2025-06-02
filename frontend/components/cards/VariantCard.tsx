@@ -3,14 +3,7 @@ import { Card } from "../ui/card";
 
 interface Props {
   name: string;
-  variant: {
-    sku: string;
-    stockLevel: number;
-    attributes: {
-      color: string;
-      size: string;
-    };
-  };
+  variant: Variant;
 }
 
 const VariantCard = ({ variant, name }: Props) => {
