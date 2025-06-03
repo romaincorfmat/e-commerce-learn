@@ -34,7 +34,12 @@ const ShoppingCartPage = () => {
       <div className="border p-6">
         <h1 className="h1-title-page">Your Cart</h1>
         {cartData?.items.map((item) => (
-          <CartDetailsCard key={item.productVariant.productSku} item={item} />
+          <CartDetailsCard
+            key={item.productVariant.productSku}
+            item={item}
+            isLoading={isLoading}
+            error={error}
+          />
         ))}
         <div className="flex justify-end gap-4 items-center mt-4">
           <p className="text-lg">Total: </p>

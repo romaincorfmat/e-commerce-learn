@@ -149,11 +149,17 @@ export async function getShoppingCartByUserId(
 ) {
   try {
     const user = req.user;
+
     if (!user) {
       throw new CustomError("User not authenticated", 401);
     }
 
-    const userShoppingCart = await ShoppingCart.findOne({ userId: user._id });
+    const userShoppingCart = await ShoppingCart.findOne({
+      userId: user._id,
+    }).populate({
+      path: "items.productId",
+      select: "name imageUrl",
+    });
 
     if (!userShoppingCart) {
       throw new CustomError("Shopping cart not found", 404);
@@ -162,6 +168,53 @@ export async function getShoppingCartByUserId(
     res.status(200).json({
       message: "Shopping cart fetched successfully",
       cart: userShoppingCart,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function deleteShoppingCartItem(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const user = req.user;
+
+    if (!user) {
+      throw new CustomError("User not authenticated", 401);
+    }
+
+    const itemId = req.params.id;
+
+    console.log("Item ID to delete:", itemId);
+
+    if (!itemId) {
+      throw new CustomError("Item ID is required", 400);
+    }
+
+    const newShoppingCart = await ShoppingCart.findOneAndUpdate(
+      {
+        userId: user._id,
+      },
+      {
+        $pull: { items: { _id: itemId } },
+      },
+      {
+        new: true,
+      }
+    );
+
+    console.log("Updated Shopping Cart:", newShoppingCart);
+
+    if (!newShoppingCart || newShoppingCart.items.length === 0) {
+      throw new CustomError("Item not found in shopping cart", 404);
+    }
+
+    res.status(200).json({
+      message: "Item deleted successfully from shopping cart",
+      cart: newShoppingCart,
     });
   } catch (error) {
     next(error);

@@ -10,6 +10,7 @@ import categoryRouter from "./routes/category.routes";
 import productRouter from "./routes/product.routes";
 import shoppingCartRouter from "./routes/shoppingCart.routes";
 import loggerMiddleware from "./middlewares/logger.middleware";
+import orderRoutes from "./routes/order.routes";
 
 const app = express();
 const port = PORT || 8000;
@@ -33,6 +34,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/shopping-carts", shoppingCartRouter);
+app.use("/api/v1/orders", orderRoutes);
 
 app.use(errorMiddleware);
 app.get("/", (req, res) => {
