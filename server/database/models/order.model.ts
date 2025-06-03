@@ -12,7 +12,7 @@ export interface IOrder {
 
 export interface IOrderDocument extends IOrder, Document {}
 
-const OrderShema = new mongoose.Schema<IOrder>(
+const OrderSchema = new mongoose.Schema<IOrder>(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -42,6 +42,6 @@ const OrderShema = new mongoose.Schema<IOrder>(
   { timestamps: true }
 );
 
-const Order = models?.Order || model<IOrder>("Order", OrderShema);
+const Order = models?.Order || model<IOrder>("Order", OrderSchema);
 
 export default Order;

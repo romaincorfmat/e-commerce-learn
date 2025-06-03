@@ -7,15 +7,22 @@ export async function createOrder(
   next: NextFunction
 ) {
   try {
-    const { shoppingCartId } = req.body;
     const user = req.user;
     if (!user) {
       res.status(401).json({ message: "User not authenticated" });
       return;
     }
+    const { shoppingCartId } = req.body;
 
-    const shoppingCartItems =
-      await ShoppingCart.findById(shoppingCartId).select("items");
+    if (!shoppingCartId || typeof shoppingCartId !== "string") {
+      res.status(400).json({ message: "Invalid shopping cart ID" });
+      return;
+    }
+
+    const shoppingCartItems = await ShoppingCart.findOne({
+      _id: shoppingCartId,
+      userId: user._id,
+    }).select("items");
 
     if (!shoppingCartItems || shoppingCartItems.items.length === 0) {
       res.status(400).json({ message: "Shopping cart is empty" });
@@ -24,8 +31,7 @@ export async function createOrder(
 
     const totalPrice = shoppingCartItems.items
       .map((item: { totalPrice: number }) => item.totalPrice)
-      .reduce((acc: number, price: number) => acc + price, 0)
-      .toFixed(2);
+      .reduce((acc: number, price: number) => acc + price, 0);
 
     const newOrder = await Order.create({
       userId: user._id,
@@ -51,24 +57,25 @@ export async function createOrder(
   }
 }
 
-export async function getOrder(
+export async function getOrders(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
-    const { shoppingCartId } = req.body;
-    const shoppingCartItems =
-      await ShoppingCart.findById(shoppingCartId).select("items");
+    const orders = await Order.find()
+      .populate("userId", "name email")
+      .populate("shoppingCartId", "items");
 
-    console.log("Shopping Cart Items:", shoppingCartItems);
+    if (!orders || orders.length === 0) {
+      res.status(404).json({ message: "No orders found" });
+      return;
+    }
 
-    const totalPrice = shoppingCartItems.items
-      .map((item: { totalPrice: number }) => item.totalPrice)
-      .reduce((acc: number, price: number) => acc + price, 0)
-      .toFixed(2);
-
-    console.log("Total Price:", totalPrice);
+    res.status(200).json({
+      message: "Orders fetched successfully",
+      orders,
+    });
   } catch (error) {
     next(error);
   }
@@ -81,6 +88,13 @@ export async function getOrderByUserId(
 ) {
   try {
     const userId = req.params.userId;
+    const user = req.user;
+
+    if (user.id.toString() !== userId && user.role !== "admin") {
+      res.status(403).json({ message: "Access denied" });
+      return;
+    }
+
     const orders = await Order.find({ userId }).populate("shoppingCartId");
 
     if (!orders || orders.length === 0) {

@@ -99,10 +99,7 @@ export async function AddOrUpdateCartItem({
           new: true,
           session,
         }
-      ).populate({
-        path: "items.productId",
-        select: "name imageUrl",
-      });
+      );
 
       if (!updatedShoppingCart) {
         throw new CustomError("Failed to update shopping cart", 500);
