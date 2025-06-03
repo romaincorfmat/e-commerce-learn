@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createShoppingCart,
   deleteShoppingCart,
+  deleteShoppingCartItem,
   getShoppingCartByUserId,
   getShoppingCarts,
 } from "../controllers/shoppingCart.controller";
@@ -26,6 +27,13 @@ shoppingCartRouter.delete(
   authorize,
   customerMiddleware,
   deleteShoppingCart
+);
+
+shoppingCartRouter.delete(
+  "/items/:id",
+  authorize,
+  customerMiddleware,
+  deleteShoppingCartItem
 );
 
 export default shoppingCartRouter;

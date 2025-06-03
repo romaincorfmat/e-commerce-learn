@@ -8,6 +8,19 @@ import { CustomError } from "../../types/error";
 import { ItemCart } from "../../types";
 import { AddOrUpdateCartItemParams } from "../../types/params";
 
+/**
+ * Adds a new item to a user's shopping cart or updates the quantity of an existing item.
+ *
+ * If the user does not have a shopping cart, a new cart is created with the specified item. If the item already exists in the cart, its quantity and total price are updated, ensuring stock availability. If the item does not exist in the cart, it is added as a new entry. All operations are performed within a MongoDB transaction for atomicity.
+ *
+ * @param userId - The user's unique identifier.
+ * @param productId - The product's unique identifier.
+ * @param productSku - The SKU of the product variant.
+ * @param quantity - The quantity to add or update.
+ * @returns The updated or newly created shopping cart document. If the item quantity is updated, the returned cart includes populated product details (`name` and `imageUrl`) for the affected item.
+ *
+ * @throws {CustomError} If stock is insufficient, or if cart creation or update fails.
+ */
 export async function AddOrUpdateCartItem({
   userId,
   productId,
