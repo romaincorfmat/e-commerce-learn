@@ -1,6 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { Order, ShoppingCart } from "../database/models";
 
+/**
+ * Creates a new order for the authenticated user based on the specified shopping cart.
+ *
+ * Extracts the shopping cart ID from the request body, verifies user authentication, checks that the cart is not empty, calculates the total price, and creates a new order with a status of "pending". Responds with the created order on success or an appropriate error message on failure.
+ *
+ * @remark Responds with 401 if the user is not authenticated, 400 if the shopping cart is empty or not found, and 500 if order creation fails.
+ */
 export async function createOrder(
   req: Request,
   res: Response,
@@ -57,6 +64,14 @@ export async function createOrder(
   }
 }
 
+
+/**
+ * Logs the items and total price of a shopping cart specified by ID.
+ *
+ * @remark
+ * This function does not send a response to the client; it only logs shopping cart details and forwards errors to the next middleware.
+ */
+
 export async function getOrders(
   req: Request,
   res: Response,
@@ -81,6 +96,11 @@ export async function getOrders(
   }
 }
 
+/**
+ * Retrieves all orders associated with a specific user.
+ *
+ * Responds with a 200 status and the list of orders if found, or a 404 status if no orders exist for the user.
+ */
 export async function getOrderByUserId(
   req: Request,
   res: Response,
