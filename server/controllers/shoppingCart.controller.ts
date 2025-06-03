@@ -136,10 +136,12 @@ export async function deleteShoppingCart(
 }
 
 /**
- * Get a specific shopping cart by user ID
- * @param req Request object containing user information
- * @param res Response object
- * @param next Next function for error handling
+ * Retrieves the authenticated user's shopping cart with populated product details.
+ *
+ * Returns the shopping cart for the current user, including each item's product name and image URL. Throws an error if the user is not authenticated or if the cart does not exist.
+ *
+ * @throws {CustomError} If the user is not authenticated.
+ * @throws {CustomError} If the shopping cart is not found.
  */
 
 export async function getShoppingCartByUserId(
@@ -174,6 +176,17 @@ export async function getShoppingCartByUserId(
   }
 }
 
+/**
+ * Removes a specific item from the authenticated user's shopping cart.
+ *
+ * @param req - Express request object containing the authenticated user and item ID in parameters.
+ * @param res - Express response object used to send the updated cart.
+ * @param next - Express next middleware function for error handling.
+ *
+ * @returns The updated shopping cart after the item has been removed.
+ *
+ * @throws {CustomError} If the user is not authenticated, the item ID is missing, or the item is not found in the cart.
+ */
 export async function deleteShoppingCartItem(
   req: Request,
   res: Response,

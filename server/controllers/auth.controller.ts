@@ -84,6 +84,13 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+/**
+ * Authenticates a user with email and password, issuing a JWT token and setting it as an HTTP-only cookie.
+ *
+ * Responds with the authenticated user's data and the JWT token in the response body. The token is also set as a secure, HTTP-only cookie. Returns HTTP 400 if required fields are missing, and HTTP 401 if authentication fails.
+ *
+ * @remark Throws an error if {@link JWT_SECRET} is not defined in the environment variables.
+ */
 export async function signIn(req: Request, res: Response, next: NextFunction) {
   const session = await mongoose.startSession();
   try {

@@ -1,6 +1,15 @@
 import { NextFunction, Request, Response } from "express";
 import { Order, ShoppingCart } from "../database/models";
 
+/**
+ * Creates a new order for the authenticated user based on the provided shopping cart.
+ *
+ * Extracts the shopping cart ID from the request body, verifies user authentication, calculates the total price of items in the cart, and creates a new order with a status of "pending". Responds with the created order details or appropriate error messages.
+ *
+ * @param req - Express request object containing the shopping cart ID in the body and the authenticated user.
+ * @param res - Express response object used to send status and order information.
+ * @param next - Express next middleware function for error handling.
+ */
 export async function createOrder(
   req: Request,
   res: Response,
@@ -51,6 +60,15 @@ export async function createOrder(
   }
 }
 
+/**
+ * Retrieves and logs the items and total price of a shopping cart based on the provided shopping cart ID.
+ *
+ * @param req - Express request object containing the `shoppingCartId` in the body.
+ * @param res - Express response object.
+ * @param next - Express next middleware function for error handling.
+ *
+ * @remark This function does not send a response to the client.
+ */
 export async function getOrder(
   req: Request,
   res: Response,
@@ -74,6 +92,15 @@ export async function getOrder(
   }
 }
 
+/**
+ * Retrieves all orders associated with a specific user ID and returns them in the response.
+ *
+ * @param req - Express request object containing the user ID in {@link req.params.userId}.
+ * @param res - Express response object used to send the list of orders or an error message.
+ * @param next - Express next middleware function for error handling.
+ *
+ * @returns Sends a 200 response with the user's orders if found, or a 404 response if no orders exist for the user.
+ */
 export async function getOrderByUserId(
   req: Request,
   res: Response,
