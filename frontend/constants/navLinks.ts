@@ -56,7 +56,7 @@ export const NAV_LINKS_CUSTOMER = [
   },
   {
     name: "Cart",
-    href: "carts/userId",
+    href: "carts",
   },
   {
     name: "Wishlist",

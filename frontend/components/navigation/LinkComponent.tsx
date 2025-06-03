@@ -5,6 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { useUser } from "@/contexts/UserContext";
+import {
+  ADMIN_ROUTES,
+  CUSTOMER_ROUTES,
+  getCartRoute,
+  getOrderRoute,
+} from "@/constants/route";
 
 interface Props {
   link: {
@@ -23,24 +29,59 @@ const LinkComponent = ({ link, isAdmin = false }: Props) => {
     return pathname === fullHref || pathname.startsWith(fullHref);
   };
 
-  const constructHref = () => {
-    // Handle special case for cart route
-    if (link.href.includes("carts/userId") && user) {
-      return `/${link.href.replace("userId", user._id)}`;
-    }
-
-    // If href already starts with /, return as is
+  const constructHref = (): string => {
+    // If href already starts with /, return as is (for custom routes)
     if (link.href.startsWith("/")) {
       return link.href;
     }
 
-    // For admin routes, prepend with /admin/
-    if (isAdmin) {
-      return `/admin/${link.href}`;
+    if (link.href === "carts" && user) {
+      return getCartRoute(user._id);
     }
 
-    // For regular routes, just prepend with /
-    return `/${link.href}`;
+    if (link.href === "orders" && user) {
+      return getOrderRoute(user._id);
+    }
+
+    if (isAdmin) {
+      switch (link.href) {
+        case "dashboard":
+          return ADMIN_ROUTES.DASHBOARD;
+        case "manage-orders":
+          return ADMIN_ROUTES.ORDERS;
+        case "stock-entry":
+          return ADMIN_ROUTES.STOCK_ENTRY;
+        case "manage-products":
+          return ADMIN_ROUTES.PRODUCTS;
+        case "manage-categories":
+          return ADMIN_ROUTES.CATEGORIES;
+        case "manage-suppliers":
+          return ADMIN_ROUTES.SUPPLIERS;
+        case "manage-customers":
+          return ADMIN_ROUTES.CUSTOMERS;
+        case "reports":
+          return ADMIN_ROUTES.REPORTS;
+        case "manage-users":
+          return ADMIN_ROUTES.USERS;
+        default:
+          return `/admin/${link.href}`;
+      }
+    }
+
+    switch (link.href) {
+      case "home":
+        return CUSTOMER_ROUTES.HOME;
+      case "products":
+        return CUSTOMER_ROUTES.PRODUCTS;
+      case "orders":
+        return user ? getOrderRoute(user._id) : CUSTOMER_ROUTES.ORDERS;
+      case "profile":
+        return CUSTOMER_ROUTES.PROFILE;
+      case "wishlist":
+        return CUSTOMER_ROUTES.WISHLIST;
+      default:
+        return `/${link.href}`;
+    }
   };
 
   return (
