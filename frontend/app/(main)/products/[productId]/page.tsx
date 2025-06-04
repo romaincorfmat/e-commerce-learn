@@ -53,6 +53,7 @@ const ProductDetailPage = () => {
             key={variant.sku}
             variant={variant}
             name={product.name}
+            productId={product._id as string}
           />
         ))}
       </section>

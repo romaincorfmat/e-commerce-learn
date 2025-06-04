@@ -5,53 +5,82 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { useUser } from "@/contexts/UserContext";
+import {
+  ADMIN_ROUTES,
+  CUSTOMER_ROUTES,
+  getCartRoute,
+  getOrderRoute,
+  NOT_FOUND,
+} from "@/constants/route";
 
 interface Props {
   link: {
     name: string;
     href: string;
   };
-  route?: string;
+  isAdmin?: boolean;
 }
 
-const LinkComponent = ({ link, route }: Props) => {
+const LinkComponent = ({ link, isAdmin = false }: Props) => {
   const pathname = usePathname();
   const { user } = useUser();
 
   const isActive = () => {
     const fullHref = constructHref();
-
-    if (route) {
-      return (
-        pathname === fullHref ||
-        (pathname.startsWith(fullHref) &&
-          pathname.charAt(fullHref.length) === "/")
-      );
-    }
-
-    return (
-      pathname === fullHref ||
-      pathname.startsWith(fullHref) ||
-      (pathname.startsWith(fullHref) &&
-        pathname.charAt(fullHref.length) === "/")
-    );
+    return pathname === fullHref || pathname.startsWith(fullHref);
   };
 
-  const constructHref = () => {
-    // Handle special case for cart route
-    if (link.href.includes("carts/userId") && user) {
-      return link.href.replace("userId", user._id);
-    }
-
+  const constructHref = (): string => {
+    // If href already starts with /, return as is (for custom routes)
     if (link.href.startsWith("/")) {
       return link.href;
     }
 
-    if (route) {
-      return `/${route}/${link.href}`;
+    if (link.href === "carts" && user) {
+      return user ? getCartRoute(user._id) : NOT_FOUND.CARTS;
     }
 
-    return `/${link.href}`;
+    if (link.href === "orders" && user) {
+      return user ? getOrderRoute(user._id) : NOT_FOUND.ORDERS;
+    }
+
+    if (isAdmin) {
+      switch (link.href) {
+        case "dashboard":
+          return ADMIN_ROUTES.DASHBOARD;
+        case "manage-orders":
+          return ADMIN_ROUTES.ORDERS;
+        case "stock-entry":
+          return ADMIN_ROUTES.STOCK_ENTRY;
+        case "manage-products":
+          return ADMIN_ROUTES.PRODUCTS;
+        case "manage-categories":
+          return ADMIN_ROUTES.CATEGORIES;
+        case "manage-suppliers":
+          return ADMIN_ROUTES.SUPPLIERS;
+        case "manage-customers":
+          return ADMIN_ROUTES.CUSTOMERS;
+        case "reports":
+          return ADMIN_ROUTES.REPORTS;
+        case "manage-users":
+          return ADMIN_ROUTES.USERS;
+        default:
+          return `/admin/${link.href}`;
+      }
+    }
+
+    switch (link.href) {
+      case "home":
+        return CUSTOMER_ROUTES.HOME;
+      case "products":
+        return CUSTOMER_ROUTES.PRODUCTS;
+      case "profile":
+        return CUSTOMER_ROUTES.PROFILE;
+      case "wishlist":
+        return CUSTOMER_ROUTES.WISHLIST;
+      default:
+        return `/${link.href}`;
+    }
   };
 
   return (

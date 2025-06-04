@@ -85,11 +85,11 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
 }
 
 /**
- * Authenticates a user with email and password, issuing a JWT token and setting it as an HTTP-only cookie.
+ * Authenticates a user by verifying email and password, then issues a JWT token.
  *
- * Responds with user data and the authentication token upon successful sign-in.
+ * On successful authentication, sets an HTTP-only cookie containing the JWT token and responds with user data and the token.
  *
- * @throws {CustomError} If the email or password is invalid.
+ * @throws {CustomError} If the email does not exist or the password is invalid.
  * @throws {Error} If the JWT secret is not defined in the environment variables.
  */
 export async function signIn(req: Request, res: Response, next: NextFunction) {
@@ -144,7 +144,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
         user,
         // For debugging purposes, you can include the token in the response
         // However, in production, it's better to avoid sending the token in the response body
-        // token,
+        ...(process.env.NODE_ENV === "development" && { token }),
       },
     });
   } catch (error) {

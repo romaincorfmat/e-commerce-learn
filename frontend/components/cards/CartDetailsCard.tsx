@@ -1,62 +1,53 @@
-import useGetProduct from "@/hooks/products/useGetProduct";
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Props {
-  item: {
-    productId: string;
-    totalPrice: number;
-    productVariant: {
-      productSku: string;
-      quantity: number;
-      unitPrice: number;
-    };
-  };
+  item: CartItem;
+  isLoading: boolean;
+  error: boolean | null;
 }
 
-const CartDetailsCard = ({ item }: Props) => {
-  const { data, isLoading, error } = useGetProduct(item.productId);
-
-  const productData = data?.data;
-
-  if (!productData) {
-    return <div>Product not found</div>;
-  }
-  const productName = productData.name;
-  const productImage = productData.imageUrl;
-
+const CartDetailsCard = ({ item, isLoading, error }: Props) => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-4 border-t my-2 md:my-4 pt-2">
       <div className="flex items-center">
-        {isLoading ? (
-          <div className="h-10 w-10 md:h-12 md:w-12 rounded-md bg-gray-300 animate-pulse">
-            {" "}
-          </div>
-        ) : error ? (
-          <div className="h-10 w-10 md:h-12 md:w-12 rounded-md bg-gray-300">
-            {" "}
-          </div>
-        ) : productImage && !error && !isLoading ? (
-          <Image
-            src={productImage}
-            width={36}
-            height={36}
-            alt={productName}
-            className="h-10 w-10 md:h-12 md:w-12 rounded-md object-cover"
-          />
-        ) : (
-          <div className="h-10 w-10 md:h-12 md:w-12 rounded-md bg-gray-300">
-            {" "}
-          </div>
-        )}
-        <p className="ml-2 md:hidden text-sm font-medium">{productName}</p>
+        <Link
+          href={`/products/${item.productId._id}`}
+          className="flex items-center"
+        >
+          {isLoading ? (
+            <div className="h-10 w-10 md:h-12 md:w-12 rounded-md bg-gray-300 animate-pulse">
+              {" "}
+            </div>
+          ) : error ? (
+            <div className="h-10 w-10 md:h-12 md:w-12 rounded-md bg-gray-300">
+              {" "}
+            </div>
+          ) : item.productId.imageUrl && !error && !isLoading ? (
+            <Image
+              src={item.productId.imageUrl}
+              width={36}
+              height={36}
+              alt={item.productId.imageUrl}
+              className="h-10 w-10 md:h-12 md:w-12 rounded-md object-cover"
+            />
+          ) : (
+            <div className="h-10 w-10 md:h-12 md:w-12 rounded-md bg-gray-300">
+              {" "}
+            </div>
+          )}
+        </Link>
+        <p className="ml-2 md:hidden text-sm font-medium">
+          {item.productId.name}
+        </p>
       </div>
       <div className="flex justify-end items-center md:hidden">
         <p className="text-sm text-right">
           ${item.productVariant.unitPrice} unit price
         </p>
       </div>
-      <p className="hidden md:block">{productName}</p>
+      <p className="hidden md:block">{item.productId.name}</p>
       <p className="hidden md:block">${item.productVariant.unitPrice}</p>
       <p className="text-sm md:text-base font-bold col-span-1">
         X {item.productVariant.quantity} pieces

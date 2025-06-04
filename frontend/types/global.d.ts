@@ -35,14 +35,20 @@ interface User {
 interface Cart {
   _id: string;
   userId: string;
-  items: {
-    productId: string;
-    productVariant: {
-      productSku: string;
-      quantity: number;
-      unitPrice: number;
-    };
-    totalPrice: number;
-  }[];
+  items: CartItem[];
   totalPrice?: number; // Optional, can be calculated
+}
+
+interface CartItem {
+  productId: {
+    _id: string;
+    name: string;
+    imageUrl: string;
+  };
+  productVariant: {
+    productSku: string;
+    quantity: number;
+    unitPrice: number;
+  };
+  totalPrice: number;
 }

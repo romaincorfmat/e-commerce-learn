@@ -95,3 +95,42 @@ export async function getShoppingCartByUserId(
     };
   }
 }
+
+export async function createAndUpdateShoppingCart(
+  formData: ShoppingCartParams
+): Promise<APIResponse<Cart>> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/v1/shopping-carts`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: `Failed to create or update shopping cart: ${response.status} ${response.statusText}`,
+        error: { message: "API request failed" },
+      };
+    }
+
+    const data = await response.json();
+
+    return {
+      success: true,
+      message: "Shopping cart created or updated successfully",
+      data: data.cart,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Internal server error",
+      error: {
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
+    };
+  }
+}

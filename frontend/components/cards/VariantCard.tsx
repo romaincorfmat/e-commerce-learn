@@ -1,12 +1,14 @@
 import React from "react";
 import { Card } from "../ui/card";
+import AddCartItem from "../buttons/AddCartItem";
 
 interface Props {
   name: string;
   variant: Variant;
+  productId: string;
 }
 
-const VariantCard = ({ variant, name }: Props) => {
+const VariantCard = ({ variant, name, productId }: Props) => {
   return (
     <Card
       className="px-2 rounded-sm cursor-pointer py-2 gap-2 flex flex-col justify-between hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 ease-in-out"
@@ -25,6 +27,17 @@ const VariantCard = ({ variant, name }: Props) => {
       <p>
         <span className="font-semibold">{variant.stockLevel}</span> in stock
       </p>
+      <AddCartItem
+        items={[
+          {
+            productId,
+            productVariant: {
+              productSku: variant.sku,
+              quantity: 1,
+            },
+          },
+        ]}
+      />
     </Card>
   );
 };
