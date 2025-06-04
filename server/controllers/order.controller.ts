@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Order, ShoppingCart } from "../database/models";
+import mongoose from "mongoose";
 
 /**
  * Creates a new order for the authenticated user based on the specified shopping cart.
@@ -13,6 +14,8 @@ export async function createOrder(
   res: Response,
   next: NextFunction
 ) {
+  const session = await mongoose.startSession();
+  session.startTransaction();
   try {
     const user = req.user;
     if (!user) {
@@ -29,7 +32,9 @@ export async function createOrder(
     const shoppingCartItems = await ShoppingCart.findOne({
       _id: shoppingCartId,
       userId: user._id,
-    }).select("items");
+    })
+      .select("items")
+      .session(session);
 
     if (!shoppingCartItems || shoppingCartItems.items.length === 0) {
       res.status(400).json({ message: "Shopping cart is empty" });
@@ -40,13 +45,18 @@ export async function createOrder(
       .map((item: { totalPrice: number }) => item.totalPrice)
       .reduce((acc: number, price: number) => acc + price, 0);
 
-    const newOrder = await Order.create({
-      userId: user._id,
-      shoppingCartId,
-      totalPrice,
-      items: shoppingCartItems.items,
-      status: "pending",
-    });
+    const newOrder = await Order.create(
+      [
+        {
+          userId: user._id,
+          shoppingCartId,
+          totalPrice,
+          items: shoppingCartItems.items,
+          status: "pending",
+        },
+      ],
+      { session }
+    );
 
     console.log("New Order Created:", newOrder);
 
@@ -55,15 +65,30 @@ export async function createOrder(
       return;
     }
 
+    const deleteCart =
+      await ShoppingCart.findByIdAndDelete(shoppingCartId).session(session);
+
+    console.log("Shopping Cart Deleted:", deleteCart);
+    if (!deleteCart) {
+      res.status(500).json({ message: "Failed to delete shopping cart" });
+      return;
+    }
+    console.log("Shopping Cart Deleted");
+
+    await session.commitTransaction();
+    session.endSession();
+
     res.status(201).json({
       message: "Order created successfully",
-      order: newOrder,
+      order: newOrder[0],
     });
   } catch (error) {
+    await session.abortTransaction();
     next(error);
+  } finally {
+    session.endSession();
   }
 }
-
 
 /**
  * Logs the items and total price of a shopping cart specified by ID.

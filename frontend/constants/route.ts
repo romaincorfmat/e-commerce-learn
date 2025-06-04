@@ -19,9 +19,15 @@ export const CUSTOMER_ROUTES = {
   WISHLIST: "/wishlist",
 };
 
+export const NOT_FOUND = {
+  CARTS: "/not-found/carts",
+  ORDERS: "/not-found/orders",
+};
+
 // Helper functions for dynamic routes
-export const getCartRoute = (userId: string): string =>
-  `${CUSTOMER_ROUTES.CART}/${userId}`;
+export const getCartRoute = (userId: string): string => {
+  return `${CUSTOMER_ROUTES.CART}/${userId}`;
+};
 
 export const getOrderRoute = (userId: string): string =>
   `${CUSTOMER_ROUTES.ORDERS}/${userId}`;

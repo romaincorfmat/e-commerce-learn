@@ -10,6 +10,7 @@ import {
   CUSTOMER_ROUTES,
   getCartRoute,
   getOrderRoute,
+  NOT_FOUND,
 } from "@/constants/route";
 
 interface Props {
@@ -36,11 +37,11 @@ const LinkComponent = ({ link, isAdmin = false }: Props) => {
     }
 
     if (link.href === "carts" && user) {
-      return getCartRoute(user._id);
+      return user ? getCartRoute(user._id) : NOT_FOUND.CARTS;
     }
 
     if (link.href === "orders" && user) {
-      return getOrderRoute(user._id);
+      return user ? getOrderRoute(user._id) : NOT_FOUND.ORDERS;
     }
 
     if (isAdmin) {
@@ -73,8 +74,6 @@ const LinkComponent = ({ link, isAdmin = false }: Props) => {
         return CUSTOMER_ROUTES.HOME;
       case "products":
         return CUSTOMER_ROUTES.PRODUCTS;
-      case "orders":
-        return user ? getOrderRoute(user._id) : CUSTOMER_ROUTES.ORDERS;
       case "profile":
         return CUSTOMER_ROUTES.PROFILE;
       case "wishlist":
