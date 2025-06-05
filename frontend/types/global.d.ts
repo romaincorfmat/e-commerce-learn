@@ -40,7 +40,7 @@ interface Cart {
 }
 
 interface CartItem {
-  productId: {
+  product: {
     _id: string;
     name: string;
     imageUrl: string;

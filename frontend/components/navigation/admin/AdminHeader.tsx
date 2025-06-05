@@ -32,7 +32,7 @@ const AdminHeader = () => {
           <div className="flex flex-col gap-4 py-2">
             {NAV_LINKS_ADMIN.map((link) => (
               <div key={link.href} onClick={() => setOpen(false)}>
-                <LinkComponent link={link} isAdmin />
+                <LinkComponent link={link} isAdmin={true} />
               </div>
             ))}
           </div>

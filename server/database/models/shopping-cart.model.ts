@@ -1,7 +1,7 @@
 import mongoose, { Document, Types, models, model } from "mongoose";
 
 export interface ICartItem {
-  productId: Types.ObjectId;
+  product: Types.ObjectId;
   productVariant: {
     productSku: string;
     quantity: number;
@@ -15,7 +15,7 @@ export interface ICartItemDocument extends ICartItem, Document {}
 
 export const CartItemSchema = new mongoose.Schema<ICartItem>(
   {
-    productId: {
+    product: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
       required: true,
@@ -50,13 +50,13 @@ export const CartItemSchema = new mongoose.Schema<ICartItem>(
 );
 
 export interface IShoppingCart {
-  userId: Types.ObjectId;
+  user: Types.ObjectId;
   items: ICartItem[];
 }
 
 const shoppingCartSchema = new mongoose.Schema<IShoppingCart>(
   {
-    userId: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,

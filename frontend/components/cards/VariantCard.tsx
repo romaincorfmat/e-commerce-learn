@@ -6,9 +6,10 @@ interface Props {
   name: string;
   variant: Variant;
   productId: string;
+  productPrice: number;
 }
 
-const VariantCard = ({ variant, name, productId }: Props) => {
+const VariantCard = ({ variant, name, productId, productPrice }: Props) => {
   return (
     <Card
       className="px-2 rounded-sm cursor-pointer py-2 gap-2 flex flex-col justify-between hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 ease-in-out"
@@ -30,7 +31,11 @@ const VariantCard = ({ variant, name, productId }: Props) => {
       <AddCartItem
         items={[
           {
-            productId,
+            product: {
+              _id: productId,
+              name,
+              unitPrice: productPrice,
+            },
             productVariant: {
               productSku: variant.sku,
               quantity: 1,

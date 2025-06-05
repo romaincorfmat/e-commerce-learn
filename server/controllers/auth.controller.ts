@@ -85,12 +85,12 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
 }
 
 /**
- * Authenticates a user by verifying email and password, then issues a JWT token.
+ * Authenticates a user using email and password, issues a JWT token, and sets it as an HTTP-only cookie.
  *
- * On successful authentication, sets an HTTP-only cookie containing the JWT token and responds with user data and the token.
+ * On successful authentication, responds with user data and the JWT token.
  *
- * @throws {CustomError} If the email does not exist or the password is invalid.
- * @throws {Error} If the JWT secret is not defined in the environment variables.
+ * @throws {CustomError} If the email does not exist or the password is incorrect.
+ * @throws {Error} If the JWT secret is not defined in environment variables.
  */
 export async function signIn(req: Request, res: Response, next: NextFunction) {
   const session = await mongoose.startSession();
@@ -144,7 +144,8 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
         user,
         // For debugging purposes, you can include the token in the response
         // However, in production, it's better to avoid sending the token in the response body
-        ...(process.env.NODE_ENV === "development" && { token }),
+        // ...(process.env.NODE_ENV === "development" && { token }),
+        token,
       },
     });
   } catch (error) {

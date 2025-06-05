@@ -31,8 +31,9 @@ const ShoppingCartPage = () => {
     .reduce((total, item) => total + item.totalPrice || 0, 0)
     .toFixed(2);
 
-  console.log("Cart Total Price:", cartTotalPrice);
-  console.log("Cart Data:", cartData);
+  // console.log("Cart Total Price:", cartTotalPrice);
+  // console.log("Cart Data:", cartData);
+  console.log("Cart Data:", cartData?._id);
   return (
     <>
       {!cartData ? (
