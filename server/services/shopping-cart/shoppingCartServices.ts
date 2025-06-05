@@ -73,7 +73,7 @@ export async function AddOrUpdateCartItem({
 
     const existingProduct = existingShoppingCart.items.find(
       (item: ItemCart) =>
-        item.product._id.toString() &&
+        item.product._id.toString() === product._id.toString() &&
         item.productVariant.productSku === productSku
     );
 

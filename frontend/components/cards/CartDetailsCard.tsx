@@ -29,7 +29,7 @@ const CartDetailsCard = ({ item, isLoading, error }: Props) => {
               src={item.product.imageUrl}
               width={36}
               height={36}
-              alt={item.product.imageUrl}
+              alt={item.product.name}
               className="h-10 w-10 md:h-12 md:w-12 rounded-md object-cover"
             />
           ) : (

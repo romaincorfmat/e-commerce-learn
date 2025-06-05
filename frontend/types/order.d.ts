@@ -1,7 +1,6 @@
 export interface ProductVariant {
   productSku: string;
   quantity: number;
-  unitPrice: number;
 }
 
 export interface OrderItem {
@@ -10,7 +9,7 @@ export interface OrderItem {
     _id: string;
     name: string;
     price: number;
-    image?: string;
+    imageUrl?: string;
   };
   productVariant: ProductVariant;
   totalPrice: number;

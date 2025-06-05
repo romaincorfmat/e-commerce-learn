@@ -209,7 +209,7 @@ export async function deleteShoppingCartItem(
 
     const newShoppingCart = await ShoppingCart.findOneAndUpdate(
       {
-        users: user._id,
+        user: user._id,
       },
       {
         $pull: { items: { _id: itemId } },
