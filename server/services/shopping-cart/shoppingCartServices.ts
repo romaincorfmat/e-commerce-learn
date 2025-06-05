@@ -44,7 +44,7 @@ export async function AddOrUpdateCartItem({
       const newShoppingCart = await ShoppingCart.create(
         [
           {
-            user: user._id,
+            user,
             items: [
               {
                 product: product._id,
@@ -94,7 +94,7 @@ export async function AddOrUpdateCartItem({
 
       const updatedShoppingCart = await ShoppingCart.findOneAndUpdate(
         {
-          user: user._id,
+          user,
           "items.product": product._id,
           "items.productVariant.productSku": productSku,
         },
@@ -134,7 +134,7 @@ export async function AddOrUpdateCartItem({
     };
 
     const updatedShoppingCart = await ShoppingCart.findOneAndUpdate(
-      { user: user._id },
+      { user },
       { $push: { items: newItem } },
       { new: true, session }
     );
