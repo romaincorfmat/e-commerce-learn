@@ -9,15 +9,13 @@ import { ItemCart } from "../../types";
 import { AddOrUpdateCartItemParams } from "../../types/params";
 
 /**
- * Adds a new item to a user's shopping cart or updates the quantity of an existing item.
+ * Adds a product variant to a user's shopping cart or updates its quantity.
  *
- * If the user does not have a shopping cart, a new cart is created with the specified item. If the item already exists in the cart, its quantity and total price are updated, ensuring stock availability. If the item does not exist in the cart, it is added as a new entry. All operations are performed within a MongoDB transaction for atomicity.
+ * If the user does not have a cart, creates a new cart with the specified item. If the item already exists in the cart, increases its quantity and updates the total price, ensuring stock availability. If the item does not exist in the cart, adds it as a new entry. All operations are performed atomically within a MongoDB transaction.
  *
- * @param user - The user object or user ID.
- * @param product - The product object.
- * @param productSku - The SKU of the product variant.
- * @param quantity - The quantity to add or update.
- * @returns The updated or newly created shopping cart document. If the item quantity is updated, the returned cart includes populated product details (`name` and `imageUrl`) for the affected item.
+ * @param productSku - The SKU of the product variant to add or update.
+ * @param quantity - The quantity to add to the cart.
+ * @returns The updated or newly created shopping cart document.
  *
  * @throws {CustomError} If stock is insufficient, or if cart creation or update fails.
  */
@@ -155,6 +153,14 @@ export async function AddOrUpdateCartItem({
   }
 }
 
+/**
+ * Deletes the shopping cart associated with the specified user.
+ *
+ * @param userId - The unique identifier of the user whose cart should be deleted.
+ * @returns The result of the deletion operation.
+ *
+ * @throws {CustomError} If the shopping cart could not be deleted.
+ */
 export async function deleteCart(userId: mongoose.Types.ObjectId | string) {
   const shoppingCartToDelete = await ShoppingCart.deleteOne({ user: userId });
 

@@ -41,12 +41,11 @@ export async function getShoppingCarts(
 }
 
 /**
- * Creates or updates a shopping cart for the authenticated user
- * Handles adding new products or updating quantities of existing products
- * Validates product availability before adding to cart
- * @param req Request object containing user and product information
- * @param res Response object
- * @param next Next function for error handling
+ * Adds a product to the authenticated user's shopping cart or updates the quantity if it already exists.
+ *
+ * Validates the request body and product availability before updating the cart. Returns the updated cart in the response.
+ *
+ * @throws {CustomError} If the user is not authenticated or if the request body is invalid.
  */
 
 export async function createShoppingCart(
@@ -92,11 +91,11 @@ export async function createShoppingCart(
 }
 
 /**
- * Delete a user ShoppingCart
- * @param req Request object containing userID
- * @params req.params.id User ID from the request parameters
- * @param res Response object
- * @param next Next function for error handling
+ * Deletes the authenticated user's shopping cart.
+ *
+ * Removes the shopping cart associated with the authenticated user if the user is authorized and the user ID in the request parameters matches the authenticated user.
+ *
+ * @throws {CustomError} If the user is not authenticated, the user ID is missing, the user is unauthorized, or validation fails.
  */
 
 export async function deleteShoppingCart(
@@ -137,11 +136,11 @@ export async function deleteShoppingCart(
 }
 
 /**
- * Retrieves the authenticated user's shopping cart, including product name and image details for each item.
+ * Retrieves the authenticated user's shopping cart with product name and image details for each item.
  *
- * @returns A JSON response with the shopping cart and populated product details.
+ * @returns A JSON response containing the user's shopping cart with populated product information.
  *
- * @throws {CustomError} If the user is not authenticated or if the shopping cart is not found.
+ * @throws {CustomError} If the user is not authenticated or if the shopping cart does not exist.
  */
 
 export async function getShoppingCartByUserId(
@@ -177,11 +176,9 @@ export async function getShoppingCartByUserId(
 }
 
 /**
- * Removes a specific item from the authenticated user's shopping cart.
+ * Deletes a specific item from the authenticated user's shopping cart.
  *
- * @param req - Express request object containing the authenticated user and item ID in parameters.
- * @param res - Express response object used to send the updated cart.
- * @param next - Express next middleware function for error handling.
+ * Removes the item identified by the provided ID from the user's shopping cart and returns the updated cart.
  *
  * @throws {CustomError} If the user is not authenticated.
  * @throws {CustomError} If the item ID is missing from the request parameters.

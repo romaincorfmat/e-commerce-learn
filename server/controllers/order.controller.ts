@@ -3,11 +3,11 @@ import { Order, ShoppingCart } from "../database/models";
 import mongoose from "mongoose";
 
 /**
- * Creates a new order for the authenticated user based on the specified shopping cart.
+ * Creates a new order for the authenticated user using the specified shopping cart.
  *
- * Extracts the shopping cart ID from the request body, verifies user authentication, checks that the cart is not empty, calculates the total price, and creates a new order with a status of "pending". Responds with the created order on success or an appropriate error message on failure.
+ * Validates the user's authentication and the provided shopping cart ID, ensures the cart is not empty, calculates the total price, creates a new order with status "pending", and deletes the shopping cart upon success. Responds with the created order or an appropriate error message.
  *
- * @remark Responds with 401 if the user is not authenticated, 400 if the shopping cart is empty or not found, and 500 if order creation fails.
+ * @remark Responds with 401 if the user is not authenticated, 400 if the shopping cart is invalid or empty, and 500 if order creation or cart deletion fails.
  */
 export async function createOrder(
   req: Request,
@@ -94,10 +94,11 @@ export async function createOrder(
 }
 
 /**
- * Logs the items and total price of a shopping cart specified by ID.
+ * Retrieves all orders with populated user, shopping cart, and product details.
  *
- * @remark
- * This function does not send a response to the client; it only logs shopping cart details and forwards errors to the next middleware.
+ * Responds with a list of orders including user information, shopping cart items, and product names and prices.
+ *
+ * @returns Sends a JSON response with the list of orders or a 404 status if none are found.
  */
 
 export async function getOrders(
@@ -126,9 +127,11 @@ export async function getOrders(
 }
 
 /**
- * Retrieves all orders associated with a specific user.
+ * Retrieves all orders for a specified user, ensuring the requester is either the user themselves or an admin.
  *
- * Responds with a 200 status and the list of orders if found, or a 404 status if no orders exist for the user.
+ * Responds with a 200 status and the user's orders if found, or a 404 status if no orders exist for the user.
+ *
+ * @remark Returns a 403 status if the requester is not authorized to access the user's orders.
  */
 export async function getOrderByUserId(
   req: Request,

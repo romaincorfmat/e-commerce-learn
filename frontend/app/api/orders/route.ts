@@ -1,5 +1,13 @@
 import { API_BASE_URL } from "@/config/env";
 
+/**
+ * Creates a new order using the specified shopping cart ID.
+ *
+ * Sends a POST request to the orders API to create an order associated with the given shopping cart.
+ *
+ * @param cartId - The identifier of the shopping cart to create an order from.
+ * @returns An object indicating success or failure. On success, includes the created order data; on failure, includes an error message and details.
+ */
 export async function createOrder(cartId: string) {
   try {
     const response = await fetch(`${API_BASE_URL}/api/v1/orders/create`, {
@@ -41,6 +49,13 @@ export async function createOrder(cartId: string) {
   }
 }
 
+/**
+ * Retrieves a list of orders from the API.
+ *
+ * Sends a GET request to the orders endpoint and returns a structured result indicating success or failure, including the list of orders on success.
+ *
+ * @returns An object with a `success` flag, a message, and either the list of orders (`data`) or error details (`error`).
+ */
 export async function getOrders() {
   try {
     const response = await fetch(`${API_BASE_URL}/api/v1/orders`, {
