@@ -62,6 +62,7 @@ export async function createShoppingCart(
     }
 
     const parsed = CreateShoppingCartBodySchema.safeParse(req.body);
+
     if (!parsed.success) {
       throw new CustomError(
         `Invalid request body, Parse Errors: ${parsed.error.errors}`,
@@ -70,13 +71,13 @@ export async function createShoppingCart(
     }
 
     const {
-      productId,
+      product,
       productVariant: { productSku, quantity },
     } = parsed.data.items[0];
 
     const newOrUpdatedCart = await AddOrUpdateCartItem({
-      userId: user._id as mongoose.Types.ObjectId | string,
-      productId,
+      user: user._id as mongoose.Types.ObjectId | string,
+      product,
       productSku,
       quantity,
     });
@@ -118,10 +119,10 @@ export async function deleteShoppingCart(
     if (userId !== userIdParams) {
       throw new CustomError("Unauthorized action", 403);
     }
-    const parsedData = DeleteShoppingCartSchema.safeParse({ userId });
+    const parsedData = DeleteShoppingCartSchema.safeParse({ user: userId });
     if (!parsedData.success) {
       throw new CustomError(
-        `Invalid userId, Parse Errors: ${parsedData.error.errors}`,
+        `Invalid user, Parse Errors: ${parsedData.error.errors}`,
         400
       );
     }
@@ -156,9 +157,9 @@ export async function getShoppingCartByUserId(
     }
 
     const userShoppingCart = await ShoppingCart.findOne({
-      userId: user._id,
+      user: user._id,
     }).populate({
-      path: "items.productId",
+      path: "items.product",
       select: "name imageUrl",
     });
 
@@ -208,7 +209,7 @@ export async function deleteShoppingCartItem(
 
     const newShoppingCart = await ShoppingCart.findOneAndUpdate(
       {
-        userId: user._id,
+        users: user._id,
       },
       {
         $pull: { items: { _id: itemId } },

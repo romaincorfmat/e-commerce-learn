@@ -17,7 +17,11 @@ interface ProductParams {
 interface ShoppingCartParams {
   userId: string;
   items: {
-    productId: string;
+    product: {
+      _id: string;
+      name: string;
+      unitPrice: number;
+    };
     productVariant: {
       productSku: string;
       quantity: number;

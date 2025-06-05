@@ -144,7 +144,8 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
         user,
         // For debugging purposes, you can include the token in the response
         // However, in production, it's better to avoid sending the token in the response body
-        ...(process.env.NODE_ENV === "development" && { token }),
+        // ...(process.env.NODE_ENV === "development" && { token }),
+        token,
       },
     });
   } catch (error) {

@@ -2,8 +2,8 @@ import mongoose, { Document, model, models, Types } from "mongoose";
 import { ICartItem, CartItemSchema } from "./shopping-cart.model";
 
 export interface IOrder {
-  userId: Types.ObjectId;
-  shoppingCartId: Types.ObjectId;
+  user: Types.ObjectId;
+  shoppingCart: Types.ObjectId;
   items: [ICartItem];
   totalPrice: number;
   orderDate: Date;
@@ -14,12 +14,12 @@ export interface IOrderDocument extends IOrder, Document {}
 
 const OrderSchema = new mongoose.Schema<IOrder>(
   {
-    userId: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    shoppingCartId: {
+    shoppingCart: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "ShoppingCart",
       required: true,

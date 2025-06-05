@@ -29,12 +29,15 @@ export async function createOrder(
       return;
     }
 
-    const shoppingCartItems = await ShoppingCart.findOne({
-      _id: shoppingCartId,
-      userId: user._id,
-    })
-      .select("items")
-      .session(session);
+    const shoppingCartItems = await ShoppingCart.findOne(
+      {
+        _id: shoppingCartId,
+        user: user._id,
+      },
+      "items"
+    ).session(session);
+
+    console.log("Shopping Cart Items: ", shoppingCartItems);
 
     if (!shoppingCartItems || shoppingCartItems.items.length === 0) {
       res.status(400).json({ message: "Shopping cart is empty" });
@@ -48,8 +51,8 @@ export async function createOrder(
     const newOrder = await Order.create(
       [
         {
-          userId: user._id,
-          shoppingCartId,
+          user: user._id,
+          shoppingCart: shoppingCartId,
           totalPrice,
           items: shoppingCartItems.items,
           status: "pending",
@@ -104,8 +107,9 @@ export async function getOrders(
 ) {
   try {
     const orders = await Order.find()
-      .populate("userId", "name email")
-      .populate("shoppingCartId", "items");
+      .populate("user", "_id name email")
+      .populate("shoppingCart", "items")
+      .populate("items.product", "name price");
 
     if (!orders || orders.length === 0) {
       res.status(404).json({ message: "No orders found" });
@@ -114,7 +118,7 @@ export async function getOrders(
 
     res.status(200).json({
       message: "Orders fetched successfully",
-      orders,
+      orders: orders,
     });
   } catch (error) {
     next(error);
@@ -135,12 +139,12 @@ export async function getOrderByUserId(
     const userId = req.params.userId;
     const user = req.user;
 
-    if (user.id.toString() !== userId && user.role !== "admin") {
+    if (user._id?.toString() !== userId && user.role !== "admin") {
       res.status(403).json({ message: "Access denied" });
       return;
     }
 
-    const orders = await Order.find({ userId }).populate("shoppingCartId");
+    const orders = await Order.find({ user: userId }).populate("shoppingCart");
 
     if (!orders || orders.length === 0) {
       res.status(404).json({ message: "No orders found for this user" });

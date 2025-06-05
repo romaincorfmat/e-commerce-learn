@@ -1,5 +1,5 @@
 export interface ItemCart {
-  productId: string;
+  product: { _id: string; name: string };
   productVariant: {
     productSku: string;
     quantity: number;

@@ -25,6 +25,7 @@ const ProductDetailPage = () => {
   }
 
   const product = data.data;
+  console.log("Product: ", product);
 
   return (
     <div className="flex flex-col gap-4 px-4">
@@ -53,6 +54,7 @@ const ProductDetailPage = () => {
             key={variant.sku}
             variant={variant}
             name={product.name}
+            productPrice={product.price}
             productId={product._id as string}
           />
         ))}

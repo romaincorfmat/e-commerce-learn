@@ -3,7 +3,11 @@ import useCreateCart from "@/hooks/carts/useCreateCart";
 
 interface AddCartItemProps {
   items: {
-    productId: string;
+    product: {
+      _id: string;
+      name: string;
+      unitPrice: number;
+    };
     productVariant: {
       productSku: string;
       quantity: number;

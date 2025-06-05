@@ -13,8 +13,8 @@ import { AddOrUpdateCartItemParams } from "../../types/params";
  *
  * If the user does not have a shopping cart, a new cart is created with the specified item. If the item already exists in the cart, its quantity and total price are updated, ensuring stock availability. If the item does not exist in the cart, it is added as a new entry. All operations are performed within a MongoDB transaction for atomicity.
  *
- * @param userId - The user's unique identifier.
- * @param productId - The product's unique identifier.
+ * @param user - The user object or user ID.
+ * @param product - The product object.
  * @param productSku - The SKU of the product variant.
  * @param quantity - The quantity to add or update.
  * @returns The updated or newly created shopping cart document. If the item quantity is updated, the returned cart includes populated product details (`name` and `imageUrl`) for the affected item.
@@ -22,8 +22,8 @@ import { AddOrUpdateCartItemParams } from "../../types/params";
  * @throws {CustomError} If stock is insufficient, or if cart creation or update fails.
  */
 export async function AddOrUpdateCartItem({
-  userId,
-  productId,
+  user,
+  product,
   productSku,
   quantity,
 }: AddOrUpdateCartItemParams) {
@@ -31,25 +31,25 @@ export async function AddOrUpdateCartItem({
   session.startTransaction();
 
   try {
-    const existingShoppingCart = await ShoppingCart.findOne({ userId }).session(
-      session
-    );
+    const existingShoppingCart = await ShoppingCart.findOne({
+      user: user._id,
+    }).session(session);
 
     // Fetch the current price from the database
-    const unitPrice = await getProductPrice(productId, productSku, session);
+    const unitPrice = await getProductPrice(product._id, productSku, session);
     const totalPrice = (quantity * unitPrice).toFixed(2);
 
     // If no shopping cart already exists for the user, create a new one
     if (!existingShoppingCart) {
-      await checkProductStock(productId, productSku, quantity, session);
+      await checkProductStock(product._id, productSku, quantity, session);
 
       const newShoppingCart = await ShoppingCart.create(
         [
           {
-            userId,
+            user: user._id,
             items: [
               {
-                productId,
+                product: product._id,
                 productVariant: {
                   productSku,
                   quantity,
@@ -73,14 +73,14 @@ export async function AddOrUpdateCartItem({
 
     const existingProduct = existingShoppingCart.items.find(
       (item: ItemCart) =>
-        item.productId.toString() &&
+        item.product._id.toString() &&
         item.productVariant.productSku === productSku
     );
 
     // If a shopping cart exist and the product exist in the current shopping cart for the user
     if (existingProduct) {
       const availableStock = await checkProductStock(
-        productId,
+        product._id,
         productSku,
         quantity,
         session
@@ -96,8 +96,8 @@ export async function AddOrUpdateCartItem({
 
       const updatedShoppingCart = await ShoppingCart.findOneAndUpdate(
         {
-          userId,
-          "items.productId": productId,
+          user: user._id,
+          "items.product": product._id,
           "items.productVariant.productSku": productSku,
         },
         {
@@ -124,9 +124,9 @@ export async function AddOrUpdateCartItem({
 
     // If a shopping cart exist but the  product does not exist in the cart, add it
 
-    await checkProductStock(productId, productSku, quantity, session);
+    await checkProductStock(product._id, productSku, quantity, session);
     const newItem = {
-      productId,
+      product: product._id,
       productVariant: {
         productSku,
         quantity,
@@ -136,7 +136,7 @@ export async function AddOrUpdateCartItem({
     };
 
     const updatedShoppingCart = await ShoppingCart.findOneAndUpdate(
-      { userId },
+      { user: user._id },
       { $push: { items: newItem } },
       { new: true, session }
     );
@@ -156,7 +156,7 @@ export async function AddOrUpdateCartItem({
 }
 
 export async function deleteCart(userId: mongoose.Types.ObjectId | string) {
-  const shoppingCartToDelete = await ShoppingCart.deleteOne({ userId });
+  const shoppingCartToDelete = await ShoppingCart.deleteOne({ user: userId });
 
   if (!shoppingCartToDelete) {
     throw new CustomError("Failed to delete shopping cart", 500);
