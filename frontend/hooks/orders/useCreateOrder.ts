@@ -13,9 +13,13 @@ const useCreateOrder = (cartId: string) => {
       return createOrder(cartId);
     },
     onSuccess: (response) => {
-      // Invalidate cart query to refresh the data
-      console.log("useCreateOrder :", response);
       const userId = response.data.user._id;
+
+      if (!userId) {
+        console.error("User ID is required");
+        return;
+      }
+
       if (cartId) {
         queryClient.invalidateQueries({
           queryKey: ["cart", cartId],

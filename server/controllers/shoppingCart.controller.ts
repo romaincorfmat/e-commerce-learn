@@ -244,12 +244,12 @@ export async function getCartStats(
 ) {
   try {
     const user = req.user;
-
+    console.log("User ID:", user?._id);
     if (!user) {
       throw new CustomError("User not authenticated", 401);
     }
 
-    const userId = user.id;
+    const userId = user._id;
 
     const userCart = await ShoppingCart.findOne({
       user: userId,
