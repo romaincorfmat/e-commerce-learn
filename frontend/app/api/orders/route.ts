@@ -91,3 +91,41 @@ export async function getOrders() {
     };
   }
 }
+
+export async function getCustomerOrders(
+  userId: string
+): Promise<APIResponse<Order[]>> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/v1/orders/${userId}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: `Failed to fetch orders: ${response.status} ${response.statusText}`,
+        error: { message: "API request failed" },
+      };
+    }
+
+    const data = await response.json();
+
+    return {
+      success: true,
+      message: "Orders fetched successfully",
+      data: data.orders,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to fetch orders",
+      error: {
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
+    };
+  }
+}

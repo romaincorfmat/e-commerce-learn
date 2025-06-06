@@ -2,7 +2,6 @@
 
 import useGetOrders from "@/hooks/orders/useGetOrders";
 import React, { useState } from "react";
-import { Order } from "@/types/order";
 import {
   Table,
   TableBody,
@@ -35,7 +34,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ChevronDown, Eye, Search } from "lucide-react";
-import { formatDate, formatPrice } from "@/lib/utils";
+import { formatDate, formatPrice, getOrderStatusColor } from "@/lib/utils";
 
 const ManageOrdersPage = () => {
   const { data, isLoading, error } = useGetOrders();
@@ -79,19 +78,6 @@ const ManageOrdersPage = () => {
   const filteredOrders = statusFilter
     ? orders.filter((order) => order.status === statusFilter)
     : orders;
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "pending":
-        return "bg-yellow-100 text-yellow-800";
-      case "completed":
-        return "bg-green-100 text-green-800";
-      case "cancelled":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -170,7 +156,7 @@ const ManageOrdersPage = () => {
                       <TableCell>{formatDate(order.orderDate)}</TableCell>
                       <TableCell>
                         <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${getOrderStatusColor(
                             order.status
                           )}`}
                         >
@@ -238,7 +224,7 @@ const ManageOrdersPage = () => {
                                     </h3>
                                     <div className="mt-2 border rounded-md">
                                       {selectedOrder.items.map(
-                                        (item, index) => (
+                                        (item: OrderItem, index: number) => (
                                           <div
                                             key={index}
                                             className="flex justify-between py-3 px-4 border-b last:border-b-0"
@@ -288,7 +274,7 @@ const ManageOrdersPage = () => {
                                       <div className="flex justify-between text-sm">
                                         <p>Status</p>
                                         <span
-                                          className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                                          className={`px-2 py-1 rounded-full text-xs font-medium ${getOrderStatusColor(
                                             selectedOrder.status
                                           )}`}
                                         >

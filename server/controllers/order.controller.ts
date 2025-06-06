@@ -149,7 +149,10 @@ export async function getOrderByUserId(
       return;
     }
 
-    const orders = await Order.find({ user: userId }).populate("shoppingCart");
+    const orders = await Order.find({ user: userId }).populate(
+      "items.product",
+      "name price"
+    );
 
     if (!orders || orders.length === 0) {
       res.status(404).json({ message: "No orders found for this user" });
