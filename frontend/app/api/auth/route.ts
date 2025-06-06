@@ -1,3 +1,4 @@
+// "use server";
 import { API_BASE_URL } from "@/config/env";
 
 export const signUp = async (formData: {
@@ -19,13 +20,16 @@ export const signUp = async (formData: {
       return {
         success: true,
         message: "Sign up successful!",
-        data,
+        data: { user: data.user },
       };
     } else {
       return {
         success: false,
         message: data.message || "Sign up failed. Please try again.",
-        error: data.error,
+        error: {
+          message:
+            typeof data.error === "string" ? data.error : "Registration failed",
+        },
       };
     }
   } catch (error) {
@@ -33,7 +37,9 @@ export const signUp = async (formData: {
     return {
       success: false,
       message: "Sign up failed. Please try again.",
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: {
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
     };
   }
 };
@@ -56,13 +62,18 @@ export const signIn = async (formData: {
       return {
         success: true,
         message: "Sign in successful!",
-        data,
+        data: { user: data.user },
       };
     } else {
       return {
         success: false,
         message: data.message || "Sign in failed. Please try again.",
-        error: data.error,
+        error: {
+          message:
+            typeof data.error === "string"
+              ? data.error
+              : "Authentication failed",
+        },
       };
     }
   } catch (error) {
@@ -70,7 +81,9 @@ export const signIn = async (formData: {
     return {
       success: false,
       message: "Sign in failed. Please try again.",
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: {
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
     };
   }
 };
@@ -89,20 +102,25 @@ export const signOut = async (): Promise<AuthResponse> => {
       return {
         success: true,
         message: "Sign out successful!",
-        data,
+        data: data.user,
       };
     } else {
       return {
         success: false,
         message: data.message || "Sign out failed. Please try again.",
-        error: data.error,
+        error: {
+          message:
+            typeof data.error === "string" ? data.error : "Sign out failed",
+        },
       };
     }
   } catch (error) {
     return {
       success: false,
       message: "Sign out failed. Please try again.",
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: {
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
     };
   }
 };

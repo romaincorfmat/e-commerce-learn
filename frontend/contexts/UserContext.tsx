@@ -12,7 +12,7 @@ const defaultContextValue: UserContextType = {
   user: null,
   isLoading: false,
   error: null,
-  fetchUserData: async () => {},
+  fetchUserData: async () => null,
 };
 
 const UserContext = createContext<UserContextType>(defaultContextValue);
@@ -30,17 +30,18 @@ export function UserProvider({ children }: { children: ReactNode }) {
     try {
       const result = await getLoggedInUser();
       if (result.success) {
-        setUser(result.data);
-        console.log("Fetched user data:", result.data);
+        setUser(result.data || null);
         setError(null);
+        return result.data || null;
       } else {
         setUser(null);
-        console.error("Error fetching user data:", result.message);
-        setError(result.error || "Failed to fetch user data");
+        return null;
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
       setError(error instanceof Error ? error.message : "Unknown error");
+      setUser(null);
+      return null;
     } finally {
       setIsLoading(false);
     }

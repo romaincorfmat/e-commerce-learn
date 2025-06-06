@@ -11,6 +11,14 @@ export async function getLoggedInUser(): Promise<APIResponse<User>> {
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        return {
+          success: false,
+          message: "Unauthorized",
+          error: { message: "Unauthorized" },
+        };
+      }
+
       console.error(
         "Failed to fetch user:",
         response.status,
@@ -28,7 +36,7 @@ export async function getLoggedInUser(): Promise<APIResponse<User>> {
     return {
       success: true,
       message: "Logged-in user fetched successfully",
-      data: data.data || data,
+      data: data.user || data, // Handle both possible API response structures
     };
   } catch (error) {
     console.error("Error fetching logged-in user:", error);
@@ -70,7 +78,7 @@ export async function getAllUsers(): Promise<APIResponse<User[]>> {
     return {
       success: true,
       message: "All users fetched successfully",
-      data: data.data || data,
+      data: data.users || data,
     };
   } catch (error) {
     return {
@@ -114,7 +122,7 @@ export async function createUser({
     return {
       success: true,
       message: "User created successfully",
-      data: data.data || data,
+      data: data.user || data,
     };
   } catch (error) {
     console.error("Error creating user:", error);

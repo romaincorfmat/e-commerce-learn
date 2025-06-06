@@ -30,7 +30,6 @@ export async function getCurrentUser(
         success: false,
         message: "Not authenticated",
       });
-      return;
     }
 
     const currentUser = await User.findById(req.user.id).select("-password");
@@ -40,12 +39,11 @@ export async function getCurrentUser(
         success: false,
         message: "User not found",
       });
-      return;
     }
 
     res.status(200).json({
       success: true,
-      data: currentUser,
+      user: currentUser,
     });
   } catch (error) {
     next(error);
@@ -87,7 +85,7 @@ export async function createUser(
     res.status(201).json({
       success: true,
       message: "User created successfully",
-      data: { newUser, password },
+      user: newUser,
     });
   } catch (error) {
     next(error);
@@ -140,6 +138,7 @@ export async function deleteUser(
     }
 
     const userToDelete = await User.findByIdAndDelete(userId);
+
     res.status(200).json({
       success: true,
       message: "User deleted successfully",
