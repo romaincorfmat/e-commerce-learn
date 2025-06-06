@@ -1,9 +1,10 @@
-export interface ProductVariant {
+interface ProductVariant {
   productSku: string;
   quantity: number;
+  unitPrice: number;
 }
 
-export interface OrderItem {
+interface OrderItem {
   _id?: string;
   product: {
     _id: string;
@@ -16,7 +17,7 @@ export interface OrderItem {
   addedAt?: string;
 }
 
-export interface ShippingAddress {
+interface ShippingAddress {
   street: string;
   city: string;
   state: string;
@@ -24,7 +25,7 @@ export interface ShippingAddress {
   country: string;
 }
 
-export interface Order {
+interface Order {
   _id: string;
   user: { _id: string; name: string; email: string };
   shoppingCart: string;
@@ -36,7 +37,7 @@ export interface Order {
   updatedAt: string;
 }
 
-export interface OrdersResponse {
+interface OrdersResponse {
   success: boolean;
   message: string;
   data: Order[];
