@@ -65,8 +65,13 @@ export async function AddOrUpdateCartItem({
         throw new CustomError("Failed to create shopping cart", 500);
       }
 
+      const populatedShoppingCart = await newShoppingCart[0].populate(
+        "user",
+        "_id name email"
+      );
+
       await session.commitTransaction();
-      return newShoppingCart[0];
+      return populatedShoppingCart;
     }
 
     const existingProduct = existingShoppingCart.items.find(
@@ -110,7 +115,10 @@ export async function AddOrUpdateCartItem({
           new: true,
           session,
         }
-      );
+      ).populate({
+        path: "user",
+        select: "_id name email",
+      });
 
       if (!updatedShoppingCart) {
         throw new CustomError("Failed to update shopping cart", 500);
@@ -137,7 +145,10 @@ export async function AddOrUpdateCartItem({
       { user },
       { $push: { items: newItem } },
       { new: true, session }
-    );
+    ).populate({
+      path: "user",
+      select: "_id name email",
+    });
 
     if (!updatedShoppingCart) {
       throw new CustomError("Failed to update shopping cart", 500);

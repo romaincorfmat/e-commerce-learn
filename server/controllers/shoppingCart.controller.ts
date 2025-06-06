@@ -10,6 +10,7 @@ import {
   CreateShoppingCartBodySchema,
   DeleteShoppingCartSchema,
 } from "../utils/helpers/shopping-cart/validation";
+import { ItemCart } from "../types";
 
 /**
  * Get All Shopping Carts for the authenticated user
@@ -157,10 +158,15 @@ export async function getShoppingCartByUserId(
 
     const userShoppingCart = await ShoppingCart.findOne({
       user: user._id,
-    }).populate({
-      path: "items.product",
-      select: "name imageUrl",
-    });
+    })
+      .populate({
+        path: "items.product",
+        select: "name imageUrl",
+      })
+      .populate({
+        path: "user",
+        select: "_id name email",
+      });
 
     if (!userShoppingCart) {
       throw new CustomError("Shopping cart not found", 404);
@@ -225,6 +231,49 @@ export async function deleteShoppingCartItem(
     res.status(200).json({
       message: "Item deleted successfully from shopping cart",
       cart: newShoppingCart,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getCartStats(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const user = req.user;
+    console.log("User ID:", user?._id);
+    if (!user) {
+      throw new CustomError("User not authenticated", 401);
+    }
+
+    const userId = user._id;
+
+    const userCart = await ShoppingCart.findOne({
+      user: userId,
+    });
+
+    if (!userCart) {
+      throw new CustomError("Shopping cart not found", 404);
+    }
+
+    const totalProducts = userCart.items.length;
+    const totalItems = userCart.items.reduce(
+      (acc: number, item: ItemCart) => acc + item.productVariant.quantity,
+      0
+    );
+    const totalPrice = userCart.items.reduce(
+      (acc: number, item: ItemCart) => acc + item.totalPrice,
+      0
+    );
+
+    res.status(200).json({
+      message: "Cart stats fetched successfully",
+      totalProducts: totalProducts,
+      totalItems: totalItems,
+      totalPrice: totalPrice,
     });
   } catch (error) {
     next(error);

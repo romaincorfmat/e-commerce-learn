@@ -11,13 +11,14 @@ import { MenuIcon } from "lucide-react";
 import SignOutButton from "../../buttons/SignOutButton";
 import LinkComponent from "../LinkComponent";
 import { NAV_LINKS_CUSTOMER } from "@/constants/navLinks";
+import ShoppingCartIcon from "@/components/customerComponents/ShoppingCartIcon";
 
 const CustomerHeader = () => {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="fixed z-50 bg-gray-100 w-full  min-h-[66px] border-b flex justify-between items-center px-12">
-      <div className="flex items-center gap-4 w-ful">
+      <div className="flex items-center gap-4 w-full">
         <h1 className="text-center text-gray-700 text-lg font-bold py-4">
           ShopOnline
         </h1>
@@ -25,6 +26,10 @@ const CustomerHeader = () => {
           Shop Everything you want with us
         </p>
       </div>
+      <div className="flex items-center mr-4">
+        <ShoppingCartIcon />
+      </div>
+
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger className="lg:hidden hover:bg-gray-200 p-1 rounded-full cursor-pointer">
           <MenuIcon className="w-6 h-6 text-gray-700 " />

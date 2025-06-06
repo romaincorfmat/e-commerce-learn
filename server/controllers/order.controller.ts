@@ -68,6 +68,8 @@ export async function createOrder(
       return;
     }
 
+    const populatedOrder = await newOrder[0].populate("user", "_id name email");
+
     const deleteCart =
       await ShoppingCart.findByIdAndDelete(shoppingCartId).session(session);
 
@@ -83,7 +85,7 @@ export async function createOrder(
 
     res.status(201).json({
       message: "Order created successfully",
-      order: newOrder[0],
+      order: populatedOrder,
     });
   } catch (error) {
     await session.abortTransaction();

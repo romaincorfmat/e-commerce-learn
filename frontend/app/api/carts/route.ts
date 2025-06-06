@@ -134,3 +134,46 @@ export async function createAndUpdateShoppingCart(
     };
   }
 }
+
+export async function getCartStats(
+  userId: string
+): Promise<
+  APIResponse<{ totalItems: number; totalPrice: number; totalProducts: number }>
+> {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/api/v1/shopping-carts/stats/${userId}`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: `Failed to fetch cart stats: ${response.status} ${response.statusText}`,
+        error: { message: "API request failed" },
+      };
+    }
+
+    const data = await response.json();
+    console.log("Cart Stats Data:", data);
+    return {
+      success: true,
+      message: "Cart stats fetched successfully",
+      data: data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Internal server error",
+      error: {
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
+    };
+  }
+}

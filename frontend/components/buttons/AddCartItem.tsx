@@ -1,5 +1,6 @@
 import { useUser } from "@/contexts/UserContext";
 import useCreateCart from "@/hooks/carts/useCreateCart";
+import { PlusIcon } from "lucide-react";
 
 interface AddCartItemProps {
   items: {
@@ -26,8 +27,10 @@ const AddCartItem = ({ items }: AddCartItemProps) => {
   return (
     <div
       onClick={() => addItemCartMutation.mutate({ userId: user._id, items })}
+      className="flex items-center justify-between border shadow-md rounded-md px-2 py-1 hover:bg-gray-200 dark:hover:bg-gray-800 transition-all duration-200 ease-in-out"
     >
-      AddCartItem
+      Add to Cart
+      <PlusIcon />
     </div>
   );
 };

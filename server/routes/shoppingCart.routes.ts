@@ -3,6 +3,7 @@ import {
   createShoppingCart,
   deleteShoppingCart,
   deleteShoppingCartItem,
+  getCartStats,
   getShoppingCartByUserId,
   getShoppingCarts,
 } from "../controllers/shoppingCart.controller";
@@ -12,6 +13,13 @@ import customerMiddleware from "../middlewares/customer.middleware";
 const shoppingCartRouter = Router();
 
 shoppingCartRouter.get("/", authorize, customerMiddleware, getShoppingCarts);
+
+shoppingCartRouter.get(
+  "/stats/:userId",
+  authorize,
+  customerMiddleware,
+  getCartStats
+);
 
 shoppingCartRouter.get(
   "/:userId",

@@ -10,10 +10,15 @@ const useCreateCart = () => {
     onSuccess: (response) => {
       if (response.success && response.data) {
         const cartId = response.data._id;
-
+        console.log("Cart ID:", cartId);
+        console.log("Response Data:", response.data.user._id);
+        const userId = response.data.user._id;
         queryClient.setQueryData(["cart", cartId], response.data);
         queryClient.invalidateQueries({
           queryKey: ["cart", cartId],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["cart-stats", userId],
         });
         toast.success(response.message || "Cart created successfully");
       }

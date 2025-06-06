@@ -12,7 +12,7 @@ interface Props {
 const VariantCard = ({ variant, name, productId, productPrice }: Props) => {
   return (
     <Card
-      className="px-2 rounded-sm cursor-pointer py-2 gap-2 flex flex-col justify-between hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 ease-in-out"
+      className="px-2 rounded-sm cursor-pointer py-2 gap-2 flex flex-col justify-between "
       onClick={() => {}}
     >
       <h2 className="font-semibold line-clamp-1">{name}</h2>
