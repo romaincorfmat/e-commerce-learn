@@ -165,7 +165,7 @@ export async function getCartStats(
     return {
       success: true,
       message: "Cart stats fetched successfully",
-      data: data,
+      data: data.stats,
     };
   } catch (error) {
     return {
