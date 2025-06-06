@@ -260,7 +260,7 @@ export async function getCartStats(
     if (!userCart) {
       res.status(200).json({
         message: "Cart stats fetched successfully",
-        data: {
+        stats: {
           totalProducts: 0,
           totalItems: 0,
           totalPrice: 0,
