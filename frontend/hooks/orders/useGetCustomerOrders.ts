@@ -5,6 +5,7 @@ export const useGetCustomerOrders = (customerId: string) => {
   const query = useQuery({
     queryKey: ["customer-order", customerId],
     queryFn: () => getCustomerOrders(customerId),
+    enabled: !!customerId,
   });
 
   return query;

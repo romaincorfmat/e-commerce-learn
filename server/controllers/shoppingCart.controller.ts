@@ -169,7 +169,11 @@ export async function getShoppingCartByUserId(
       });
 
     if (!userShoppingCart) {
-      throw new CustomError("Shopping cart not found", 404);
+      res.status(200).json({
+        message: "Shopping cart fetched successfully",
+        cart: null,
+      });
+      return;
     }
 
     res.status(200).json({
@@ -222,8 +226,6 @@ export async function deleteShoppingCartItem(
       }
     );
 
-    console.log("Updated Shopping Cart:", newShoppingCart);
-
     if (!newShoppingCart || newShoppingCart.items.length === 0) {
       throw new CustomError("Item not found in shopping cart", 404);
     }
@@ -256,7 +258,15 @@ export async function getCartStats(
     });
 
     if (!userCart) {
-      throw new CustomError("Shopping cart not found", 404);
+      res.status(200).json({
+        message: "Cart stats fetched successfully",
+        stats: {
+          totalProducts: 0,
+          totalItems: 0,
+          totalPrice: 0,
+        },
+      });
+      return;
     }
 
     const totalProducts = userCart.items.length;
@@ -271,9 +281,11 @@ export async function getCartStats(
 
     res.status(200).json({
       message: "Cart stats fetched successfully",
-      totalProducts: totalProducts,
-      totalItems: totalItems,
-      totalPrice: totalPrice,
+      stats: {
+        totalProducts: totalProducts,
+        totalItems: totalItems,
+        totalPrice: totalPrice,
+      },
     });
   } catch (error) {
     next(error);

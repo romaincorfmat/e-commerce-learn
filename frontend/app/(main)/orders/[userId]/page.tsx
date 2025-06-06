@@ -1,6 +1,5 @@
 "use client";
 
-import { useUser } from "@/contexts/UserContext";
 import useGetCustomerOrders from "@/hooks/orders/useGetCustomerOrders";
 import React, { useState } from "react";
 import {
@@ -30,13 +29,18 @@ import { Button } from "@/components/ui/button";
 import { Eye, Package } from "lucide-react";
 import { formatDate, formatPrice, getOrderStatusColor } from "@/lib/utils";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
 const CustomerOrderPage = () => {
-  const { user } = useUser();
-  const { data, isLoading } = useGetCustomerOrders(user?._id || "");
+  const params = useParams();
+  const userId = params.userId as string;
+
+  console.log("Params", userId);
+
+  const { data, isLoading } = useGetCustomerOrders(userId || "");
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
-  if (!user) {
+  if (!userId) {
     return (
       <div className="container mx-auto p-6">
         <Card className="w-full">

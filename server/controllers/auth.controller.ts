@@ -68,7 +68,6 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
     });
 
     await session.commitTransaction();
-    session.endSession();
 
     res.status(201).json({
       message: "User created successfully",
@@ -78,9 +77,10 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
       },
     });
   } catch (error) {
+    await session.abortTransaction();
     next(error);
-    session.abortTransaction();
-    session.endSession();
+  } finally {
+    await session.endSession();
   }
 }
 
@@ -149,9 +149,10 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
       },
     });
   } catch (error) {
-    session.abortTransaction();
-    session.endSession();
+    await session.abortTransaction();
     next(error);
+  } finally {
+    await session.endSession();
   }
 }
 
