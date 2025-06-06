@@ -1,3 +1,4 @@
+"use server";
 import { API_BASE_URL } from "@/config/env";
 
 export const signUp = async (formData: {

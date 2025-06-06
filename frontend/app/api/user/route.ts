@@ -11,6 +11,14 @@ export async function getLoggedInUser(): Promise<APIResponse<User>> {
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        return {
+          success: false,
+          message: "Unauthorized",
+          error: { message: "Unauthorized" },
+        };
+      }
+
       console.error(
         "Failed to fetch user:",
         response.status,

@@ -74,8 +74,13 @@ export function AuthForm<T extends FieldValues>({
               : "Account created successfully!")
         );
 
-        await fetchUserData();
-        router.push("/home");
+        const userData = await fetchUserData();
+
+        if (userData?.role === "admin") {
+          router.push("/admin");
+        } else {
+          router.push("/home");
+        }
       } else {
         toast.error(
           response.message || "Authentication failed. Please try again."
