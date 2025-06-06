@@ -12,11 +12,16 @@ const useCreateOrder = (cartId: string) => {
       }
       return createOrder(cartId);
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
       // Invalidate cart query to refresh the data
+      console.log("useCreateOrder :", response);
+      const userId = response.data.user._id;
       if (cartId) {
         queryClient.invalidateQueries({
           queryKey: ["cart", cartId],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["cart-stats", userId],
         });
       }
 

@@ -3,6 +3,7 @@ import {
   createShoppingCart,
   deleteShoppingCart,
   deleteShoppingCartItem,
+  getCartStats,
   getShoppingCartByUserId,
   getShoppingCarts,
 } from "../controllers/shoppingCart.controller";
@@ -18,6 +19,13 @@ shoppingCartRouter.get(
   authorize,
   customerMiddleware,
   getShoppingCartByUserId
+);
+
+shoppingCartRouter.get(
+  "/stats/:userId",
+  authorize,
+  customerMiddleware,
+  getCartStats
 );
 
 shoppingCartRouter.post("/", authorize, customerMiddleware, createShoppingCart);

@@ -34,7 +34,7 @@ interface User {
 
 interface Cart {
   _id: string;
-  userId: string;
+  user: { _id: string; name: string; email: string };
   items: CartItem[];
   totalPrice?: number; // Optional, can be calculated
 }
