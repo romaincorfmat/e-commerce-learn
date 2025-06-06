@@ -135,7 +135,11 @@ export async function createAndUpdateShoppingCart(
   }
 }
 
-export async function getCartStats(userId: string) {
+export async function getCartStats(
+  userId: string
+): Promise<
+  APIResponse<{ totalItems: number; totalPrice: number; totalProducts: number }>
+> {
   try {
     const response = await fetch(
       `${API_BASE_URL}/api/v1/shopping-carts/stats/${userId}`,

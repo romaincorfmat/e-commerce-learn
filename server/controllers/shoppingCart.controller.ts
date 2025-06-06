@@ -251,16 +251,20 @@ export async function getCartStats(
 
     const userId = user.id;
 
-    const cartStats = await ShoppingCart.findOne({
+    const userCart = await ShoppingCart.findOne({
       user: userId,
     });
 
-    const totalProducts = cartStats.items.length;
-    const totalItems = cartStats.items.reduce(
+    if (!userCart) {
+      throw new CustomError("Shopping cart not found", 404);
+    }
+
+    const totalProducts = userCart.items.length;
+    const totalItems = userCart.items.reduce(
       (acc: number, item: ItemCart) => acc + item.productVariant.quantity,
       0
     );
-    const totalPrice = cartStats.items.reduce(
+    const totalPrice = userCart.items.reduce(
       (acc: number, item: ItemCart) => acc + item.totalPrice,
       0
     );

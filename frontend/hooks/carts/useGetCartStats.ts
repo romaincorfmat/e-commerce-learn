@@ -5,6 +5,7 @@ const useGetCartStats = (userId: string) => {
   const query = useQuery({
     queryKey: ["cart-stats", userId],
     queryFn: () => getCartStats(userId),
+    enabled: Boolean(userId),
   });
 
   return query;

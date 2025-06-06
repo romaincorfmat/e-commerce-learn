@@ -15,17 +15,17 @@ const shoppingCartRouter = Router();
 shoppingCartRouter.get("/", authorize, customerMiddleware, getShoppingCarts);
 
 shoppingCartRouter.get(
-  "/:userId",
-  authorize,
-  customerMiddleware,
-  getShoppingCartByUserId
-);
-
-shoppingCartRouter.get(
   "/stats/:userId",
   authorize,
   customerMiddleware,
   getCartStats
+);
+
+shoppingCartRouter.get(
+  "/:userId",
+  authorize,
+  customerMiddleware,
+  getShoppingCartByUserId
 );
 
 shoppingCartRouter.post("/", authorize, customerMiddleware, createShoppingCart);
