@@ -62,9 +62,9 @@ export function AuthForm<T extends FieldValues>({
   const handleSubmit: SubmitHandler<T> = async (data) => {
     try {
       setIsLoading(true);
-      console.log("Form data Submitted", data);
       const response = await onSubmit(data);
 
+      console.log("Response:", response);
       // Check response and show appropriate toast
       if (response.success) {
         toast.success(
@@ -74,12 +74,16 @@ export function AuthForm<T extends FieldValues>({
               : "Account created successfully!")
         );
 
-        const userData = await fetchUserData();
+        await fetchUserData();
 
-        if (userData?.role === "admin") {
-          router.push("/admin");
+        // Use type assertion with multiple levels for nested structure
+        const userData = response.data;
+        if (!userData) return;
+
+        if (userData?.user?.role === "admin") {
+          router.push("/admin/dashboard");
         } else {
-          router.push("/home");
+          router.push("/products");
         }
       } else {
         toast.error(

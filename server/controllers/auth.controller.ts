@@ -63,18 +63,19 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-      sameSite: "strict", // Helps prevent CSRF attacks
-      maxAge: 60 * 60 * 1000, // 1 hour
+      sameSite: "lax", // Changed from strict to lax for better compatibility
+      path: "/", // Ensure cookie is available for all paths
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
     });
+
+    const user = newUser[0];
 
     await session.commitTransaction();
 
     res.status(201).json({
       message: "User created successfully",
-      data: {
-        user: newUser[0],
-        // , token
-      },
+      user,
+      // , token
     });
   } catch (error) {
     await session.abortTransaction();
@@ -131,8 +132,9 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-      sameSite: "strict", // Helps prevent CSRF attacks
-      maxAge: 60 * 60 * 1000, // 1 hour
+      sameSite: "lax", // Changed from strict to lax for better compatibility
+      path: "/", // Ensure cookie is available for all paths
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
     });
 
     await session.commitTransaction();
@@ -140,13 +142,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
 
     res.status(200).json({
       message: "User signed in successfully",
-      data: {
-        user,
-        // For debugging purposes, you can include the token in the response
-        // However, in production, it's better to avoid sending the token in the response body
-        // ...(process.env.NODE_ENV === "development" && { token }),
-        token,
-      },
+      user,
     });
   } catch (error) {
     await session.abortTransaction();
@@ -163,7 +159,7 @@ export async function signOut(req: Request, res: Response, next: NextFunction) {
     res.clearCookie("token", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // Match the setting used when creating
-      sameSite: "strict",
+      sameSite: "lax",
       path: "/", // Make sure the path matches the one used when setting the cookie
     });
 

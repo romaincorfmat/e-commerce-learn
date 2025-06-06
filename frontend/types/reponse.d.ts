@@ -1,8 +1,13 @@
 interface AuthResponse {
-  success?: boolean;
+  success: boolean;
   message?: string;
-  data?: Record<string, unknown>;
-  error?: string;
+  data?: {
+    user: User;
+  };
+  error?: {
+    message: string;
+    details?: Record<string, string[]>;
+  };
 }
 
 // interface APIResponse<T> {

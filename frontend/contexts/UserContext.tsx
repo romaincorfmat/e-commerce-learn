@@ -31,7 +31,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
       const result = await getLoggedInUser();
       if (result.success) {
         setUser(result.data || null);
-        console.log("Fetched user data:", result.data);
         setError(null);
         return result.data || null;
       } else {
