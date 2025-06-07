@@ -1,13 +1,9 @@
-// frontend/app/api/invoices/[orderId]/route.ts
 import { API_BASE_URL } from "@/config/env";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { orderId: string } }
-) {
+export async function POST(request: NextRequest) {
   try {
-    const orderId = params.orderId;
+    const { orderId } = await request.json();
 
     if (!orderId) {
       return NextResponse.json(
@@ -20,15 +16,27 @@ export async function GET(
       );
     }
 
+    const cookieHeader = request.headers.get("cookie");
+
+    const headers = new Headers();
+    if (cookieHeader) {
+      headers.set("cookie", cookieHeader);
+    }
+    headers.set("Content-Type", "application/json");
+
     const response = await fetch(
       `${API_BASE_URL}/api/v1/orders/invoices/${orderId}`,
       {
         method: "GET",
         credentials: "include",
+        headers,
       }
     );
 
     if (!response.ok) {
+      console.error(
+        `Invoice download failed: ${response.status} ${response.statusText}`
+      );
       return NextResponse.json(
         {
           success: false,
@@ -39,10 +47,8 @@ export async function GET(
       );
     }
 
-    // Get the PDF data as array buffer
     const pdfData = await response.arrayBuffer();
 
-    // Return the PDF with proper headers
     return new NextResponse(pdfData, {
       status: 200,
       headers: {
