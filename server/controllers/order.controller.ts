@@ -177,10 +177,15 @@ export async function updateOrderStatus(
     const { orderId } = req.params;
     const { status } = req.body;
 
+    const validStatuses = ["pending", "completed", "cancelled"];
+    if (!validStatuses.includes(status)) {
+      res.status(400).json({ message: "Invalid status" });
+      return;
+    }
+
     const updatedOrder = await Order.findByIdAndUpdate(
       {
         _id: orderId,
-        user: req.user._id,
       },
       {
         status,
