@@ -47,15 +47,15 @@ export const generateInvoicePDF = async (
       .stroke();
   };
 
-  // Add company logo (you would need to replace with your actual logo path)
-  // doc.image("path/to/your/logo.png", 50, 45, { width: 150 });
+  const logoPath = "./assets/logo.png";
+  doc.image(logoPath, 50, 35, { width: 80 });
 
-  // Add invoice title with a better style
+  // Add invoice title with a better style - moved to the right side to avoid overlap with logo
   doc
     .fillColor(accentColor)
     .fontSize(28)
     .font("Helvetica-Bold")
-    .text("INVOICE", 50, 60);
+    .text("INVOICE", 350, 60, { align: "right" });
 
   // Add invoice metadata in a better format
   const metadataTop = 120;

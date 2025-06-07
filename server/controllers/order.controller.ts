@@ -217,12 +217,13 @@ export async function downloadInvoice(
   try {
     const { orderId } = req.params;
     const user = req.user;
-    const userId = req.user?._id;
 
     if (!user) {
       res.status(401).json({ message: "User not authenticated" });
       return;
     }
+
+    const userId = user._id;
 
     const order = await Order.findById(orderId)
       .populate("user", "_id name email")
@@ -242,6 +243,8 @@ export async function downloadInvoice(
     }
 
     await generateInvoicePDF(order, res);
+
+    return;
   } catch (error) {
     next(error);
   }

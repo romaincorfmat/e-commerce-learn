@@ -19,8 +19,9 @@ interface PopulatedProduct {
 // Variant information for the product
 interface ProductVariant {
   _id?: Types.ObjectId;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any; // For any variant attributes like color, size, etc.
+  productSku: string;
+  price: number;
+  quantity: number;
 }
 
 // A single item in the order with populated product info

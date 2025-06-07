@@ -14,14 +14,14 @@ const orderRoutes = Router();
 
 orderRoutes.get("/", authorize, adminMiddleware, getOrders);
 
-orderRoutes.get("/:userId", authorize, customerMiddleware, getOrdersByUserId);
-
 orderRoutes.get(
   "/invoices/:orderId",
   authorize,
   customerMiddleware,
   downloadInvoice
 );
+
+orderRoutes.get("/:userId", authorize, customerMiddleware, getOrdersByUserId);
 
 orderRoutes.post("/create", authorize, customerMiddleware, createOrder);
 
