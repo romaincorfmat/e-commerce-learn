@@ -30,6 +30,7 @@ import { Eye, Package } from "lucide-react";
 import { formatDate, formatPrice, getOrderStatusColor } from "@/lib/utils";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { downloadInvoice } from "@/app/api/invoices/route";
 
 const CustomerOrderPage = () => {
   const params = useParams();
@@ -81,6 +82,8 @@ const CustomerOrderPage = () => {
   }
 
   const orders = data?.data || [];
+
+  console.log("Orders", orders);
 
   if (orders.length === 0) {
     return (
@@ -239,6 +242,15 @@ const CustomerOrderPage = () => {
                                     </p>
                                   </div>
                                 </div>
+                                <Button
+                                  variant="outline"
+                                  className="mt-4"
+                                  onClick={() =>
+                                    downloadInvoice(selectedOrder._id)
+                                  }
+                                >
+                                  Download Invoice
+                                </Button>
                               </div>
                             </div>
                           </>
