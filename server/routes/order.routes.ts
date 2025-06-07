@@ -5,6 +5,7 @@ import {
   createOrder,
   getOrderByUserId,
   getOrders,
+  updateOrderStatus,
 } from "../controllers/order.controller";
 import adminMiddleware from "../middlewares/admin.middleware";
 
@@ -15,6 +16,13 @@ orderRoutes.get("/", authorize, adminMiddleware, getOrders);
 orderRoutes.get("/:userId", authorize, customerMiddleware, getOrderByUserId);
 
 orderRoutes.post("/create", authorize, customerMiddleware, createOrder);
+
+orderRoutes.put(
+  "/update-status/:orderId",
+  authorize,
+  adminMiddleware,
+  updateOrderStatus
+);
 
 orderRoutes.delete("/cancel", async (req, res) => {
   res.send("Order routes are working");

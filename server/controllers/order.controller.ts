@@ -167,3 +167,43 @@ export async function getOrderByUserId(
     next(error);
   }
 }
+
+export async function updateOrderStatus(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    const validStatuses = ["pending", "completed", "cancelled"];
+    if (!validStatuses.includes(status)) {
+      res.status(400).json({ message: "Invalid status" });
+      return;
+    }
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+      {
+        _id: orderId,
+      },
+      {
+        status,
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (!updatedOrder) {
+      throw new Error("Order not found");
+    }
+
+    res.status(200).json({
+      message: "Order status updated successfully",
+      order: updatedOrder,
+    });
+  } catch (error) {
+    next(error);
+  }
+}

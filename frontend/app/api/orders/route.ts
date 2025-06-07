@@ -31,8 +31,6 @@ export async function createOrder(cartId: string) {
 
     const data = await response.json();
 
-    console.log("Order Data:", data);
-
     return {
       success: true,
       message: "Order created successfully",
@@ -123,6 +121,49 @@ export async function getCustomerOrders(
     return {
       success: false,
       message: "Failed to fetch orders",
+      error: {
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
+    };
+  }
+}
+
+export async function updateOrderStatus(
+  orderId: string,
+  status: string
+): Promise<APIResponse<Order>> {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/api/v1/orders/update-status/${orderId}`,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ status }),
+      }
+    );
+
+    if (!response.ok) {
+      return {
+        success: false,
+        message: `Failed to update order status: ${response.status} ${response.statusText}`,
+        error: { message: "API request failed" },
+      };
+    }
+
+    const data = await response.json();
+
+    return {
+      success: true,
+      message: "Order status updated successfully",
+      data: data.order,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to update order status",
       error: {
         message: error instanceof Error ? error.message : "Unknown error",
       },

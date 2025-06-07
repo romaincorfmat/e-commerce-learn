@@ -35,9 +35,11 @@ import {
 } from "@/components/ui/sheet";
 import { ChevronDown, Eye, Search } from "lucide-react";
 import { formatDate, formatPrice, getOrderStatusColor } from "@/lib/utils";
+import UpdateOrderStatus from "@/components/adminComponents/buttons/UpdateOrderStatus";
 
 const ManageOrdersPage = () => {
-  const { data, isLoading, error } = useGetOrders();
+  const { data, isLoading, error, refetch } = useGetOrders();
+
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
 
@@ -63,7 +65,7 @@ const ManageOrdersPage = () => {
           <div className="flex items-center justify-center h-64">
             <div className="text-center text-destructive">
               <p>Failed to load orders</p>
-              <p className="text-sm">{error.message}</p>
+              <p className="text-sm">{error?.message || "Unknown error"}</p>
             </div>
           </div>
         </CardContent>
@@ -73,8 +75,6 @@ const ManageOrdersPage = () => {
 
   const orders: Order[] = data?.data || [];
 
-  console.log("Orders", orders);
-
   const filteredOrders = statusFilter
     ? orders.filter((order) => order.status === statusFilter)
     : orders;
@@ -83,7 +83,7 @@ const ManageOrdersPage = () => {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex max-lg:flex-col lg:items-center gap-4 justify-between">
             <div>
               <CardTitle>Manage Orders</CardTitle>
               <CardDescription>View and manage customer orders</CardDescription>
@@ -297,22 +297,24 @@ const ManageOrdersPage = () => {
                                 </div>
                                 <div className="flex justify-end gap-2 mt-4">
                                   <Button variant="outline">Cancel</Button>
-                                  <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                      <Button>Update Status</Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                      <DropdownMenuItem>
-                                        Pending
-                                      </DropdownMenuItem>
-                                      <DropdownMenuItem>
-                                        Completed
-                                      </DropdownMenuItem>
-                                      <DropdownMenuItem className="text-destructive">
-                                        Cancelled
-                                      </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                  </DropdownMenu>
+
+                                  <UpdateOrderStatus
+                                    order={selectedOrder}
+                                    onUpdate={(status: string) => {
+                                      setSelectedOrder((prevOrder) =>
+                                        prevOrder
+                                          ? {
+                                              ...prevOrder,
+                                              status: status as
+                                                | "pending"
+                                                | "completed"
+                                                | "cancelled",
+                                            }
+                                          : null
+                                      );
+                                      refetch();
+                                    }}
+                                  />
                                 </div>
                               </>
                             )}
