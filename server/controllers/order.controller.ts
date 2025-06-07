@@ -167,3 +167,38 @@ export async function getOrderByUserId(
     next(error);
   }
 }
+
+export async function updateOrderStatus(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+      {
+        _id: orderId,
+        user: req.user._id,
+      },
+      {
+        status,
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (!updatedOrder) {
+      throw new Error("Order not found");
+    }
+
+    res.status(200).json({
+      message: "Order status updated successfully",
+      order: updatedOrder,
+    });
+  } catch (error) {
+    next(error);
+  }
+}

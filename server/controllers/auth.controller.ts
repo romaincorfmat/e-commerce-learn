@@ -75,7 +75,6 @@ export async function signUp(req: Request, res: Response, next: NextFunction) {
     res.status(201).json({
       message: "User created successfully",
       user,
-      // , token
     });
   } catch (error) {
     await session.abortTransaction();
@@ -143,6 +142,7 @@ export async function signIn(req: Request, res: Response, next: NextFunction) {
     res.status(200).json({
       message: "User signed in successfully",
       user,
+      // token,
     });
   } catch (error) {
     await session.abortTransaction();
