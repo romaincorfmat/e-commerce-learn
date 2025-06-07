@@ -216,7 +216,7 @@ export const generateInvoicePDF = async (
     .fillColor(secondaryColor)
     .text("Thank you for your business!", 50, footerY, { align: "center" })
     .text(
-      "ShopOnline Inc. | 123 Business Street, City, State ZIP | Phone: (123) 456-7890 | Email: contact@example.com",
+      "ShopOnline Inc. | 123 Business Street, City, State ZIP | Phone: 0439 456 7890 | Email: contact@example.com",
       50,
       footerY + 20,
       {
