@@ -3,7 +3,7 @@ import authorize from "../middlewares/auth.middleware";
 import customerMiddleware from "../middlewares/customer.middleware";
 import {
   createOrder,
-  getOrderByUserId,
+  getOrdersByUserId,
   getOrders,
   updateOrderStatus,
 } from "../controllers/order.controller";
@@ -13,7 +13,7 @@ const orderRoutes = Router();
 
 orderRoutes.get("/", authorize, adminMiddleware, getOrders);
 
-orderRoutes.get("/:userId", authorize, customerMiddleware, getOrderByUserId);
+orderRoutes.get("/:userId", authorize, customerMiddleware, getOrdersByUserId);
 
 orderRoutes.post("/create", authorize, customerMiddleware, createOrder);
 

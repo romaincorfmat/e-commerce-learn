@@ -135,7 +135,7 @@ export async function getOrders(
  *
  * @remark Returns a 403 status if the requester is not authorized to access the user's orders.
  */
-export async function getOrderByUserId(
+export async function getOrdersByUserId(
   req: Request,
   res: Response,
   next: NextFunction
