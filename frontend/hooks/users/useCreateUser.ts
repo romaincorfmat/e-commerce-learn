@@ -8,6 +8,7 @@ function useCreateUser() {
     mutationFn: createUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-stats"] });
     },
   });
 

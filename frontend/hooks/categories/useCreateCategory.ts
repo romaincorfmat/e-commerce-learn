@@ -8,6 +8,7 @@ const useCreateCategory = () => {
     mutationFn: createCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-stats"] });
     },
   });
 

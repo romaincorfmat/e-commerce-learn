@@ -27,6 +27,9 @@ const useCreateOrder = (cartId: string) => {
         queryClient.invalidateQueries({
           queryKey: ["cart-stats", userId],
         });
+        queryClient.invalidateQueries({
+          queryKey: ["admin-stats"],
+        });
       }
 
       // Invalidate orders to refresh orders list
