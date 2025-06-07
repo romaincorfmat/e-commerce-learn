@@ -30,6 +30,8 @@ import { Eye, Package } from "lucide-react";
 import { formatDate, formatPrice, getOrderStatusColor } from "@/lib/utils";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { toast } from "sonner";
+import { downloadInvoice } from "@/lib/invoice";
 
 const CustomerOrderPage = () => {
   const params = useParams();
@@ -81,6 +83,8 @@ const CustomerOrderPage = () => {
   }
 
   const orders = data?.data || [];
+
+  console.log("Orders", orders);
 
   if (orders.length === 0) {
     return (
@@ -239,6 +243,23 @@ const CustomerOrderPage = () => {
                                     </p>
                                   </div>
                                 </div>
+                                <Button
+                                  variant="outline"
+                                  className="mt-4"
+                                  onClick={() => {
+                                    toast.promise(
+                                      downloadInvoice(selectedOrder._id),
+                                      {
+                                        loading: "Downloading invoice...",
+                                        success:
+                                          "Invoice downloaded successfully",
+                                        error: "Failed to download invoice",
+                                      }
+                                    );
+                                  }}
+                                >
+                                  Download Invoice
+                                </Button>
                               </div>
                             </div>
                           </>

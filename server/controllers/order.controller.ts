@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Order, ShoppingCart } from "../database/models";
 import mongoose from "mongoose";
+import { generateInvoicePDF } from "../services/invoices/invoice.services";
 
 /**
  * Creates a new order for the authenticated user using the specified shopping cart.
@@ -203,6 +204,47 @@ export async function updateOrderStatus(
       message: "Order status updated successfully",
       order: updatedOrder,
     });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function downloadInvoice(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { orderId } = req.params;
+    const user = req.user;
+
+    if (!user) {
+      res.status(401).json({ message: "User not authenticated" });
+      return;
+    }
+
+    const userId = user._id;
+
+    const order = await Order.findById(orderId)
+      .populate("user", "_id name email")
+      .populate("items.product", "name price");
+
+    if (!order) {
+      res.status(404).json({ message: "Order not found" });
+      return;
+    }
+
+    if (
+      userId?.toString() !== order.user._id.toString() &&
+      user.role !== "admin"
+    ) {
+      res.status(403).json({ message: "Access denied" });
+      return;
+    }
+
+    await generateInvoicePDF(order, res);
+
+    return;
   } catch (error) {
     next(error);
   }
