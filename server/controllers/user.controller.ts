@@ -62,8 +62,9 @@ export async function createUser(
       res.status(400).json({ message: "Name and role are required" });
     }
 
-    if (role && role !== "admin" && role !== "user") {
+    if (role && role !== "admin" && role !== "user" && role !== "customer") {
       res.status(400).json({ message: "Invalid role specified" });
+      return;
     }
 
     const email = generateEmail(name);

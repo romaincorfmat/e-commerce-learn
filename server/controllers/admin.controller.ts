@@ -12,14 +12,26 @@ export const getAdminStats = async (
   try {
     const totalOrders = await Order.countDocuments({}).session(session);
     const totalProducts = await Product.countDocuments({}).session(session);
-    const totalUsers = await User.countDocuments({}).session(session);
+    const totalCustomers = await User.countDocuments({
+      role: "customer",
+    }).session(session);
     const totalCategories = await Category.countDocuments({}).session(session);
+
+    const allOrders = await Order.find({})
+      .session(session)
+      .select("totalPrice");
+
+    const totalRevenue = allOrders.reduce(
+      (acc, order) => acc + order.totalPrice,
+      0
+    );
 
     const stats = {
       totalOrders,
       totalProducts,
-      totalUsers,
+      totalCustomers,
       totalCategories,
+      totalRevenue,
     };
 
     await session.commitTransaction();
