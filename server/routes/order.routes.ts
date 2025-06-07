@@ -6,6 +6,7 @@ import {
   getOrdersByUserId,
   getOrders,
   updateOrderStatus,
+  downloadInvoice,
 } from "../controllers/order.controller";
 import adminMiddleware from "../middlewares/admin.middleware";
 
@@ -14,6 +15,13 @@ const orderRoutes = Router();
 orderRoutes.get("/", authorize, adminMiddleware, getOrders);
 
 orderRoutes.get("/:userId", authorize, customerMiddleware, getOrdersByUserId);
+
+orderRoutes.get(
+  "/invoices/:orderId",
+  authorize,
+  customerMiddleware,
+  downloadInvoice
+);
 
 orderRoutes.post("/create", authorize, customerMiddleware, createOrder);
 

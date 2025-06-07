@@ -23,6 +23,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.16.0",
     "mongoose": "^8.15.0",
+    "pdfkit": "^0.17.1",
+    "puppeteer": "^24.10.0",
     "zod": "^3.25.34"
   },
   "devDependencies": {
@@ -31,6 +33,7 @@
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.9",
+    "@types/pdfkit": "^0.13.9",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
     "eslint": "^9.27.0",
