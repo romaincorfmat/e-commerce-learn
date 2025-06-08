@@ -8,7 +8,7 @@ import React from "react";
 const AdminDashboardPage = () => {
   const { data, isLoading, error } = useGetAdminStats();
 
-  const stats = data?.data;
+  const stats = data?.stats;
   console.log("Stats", stats);
   if (error) {
     return (
@@ -32,7 +32,7 @@ const AdminDashboardPage = () => {
       />
       <MetricCard
         title="Total Revenue"
-        value={stats?.totalRevenue}
+        value={stats?.totalRevenue.toFixed(2)}
         icon={<DollarSign />}
         isLoading={isLoading}
       />

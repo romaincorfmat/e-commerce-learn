@@ -10,7 +10,10 @@ export async function getAdminStats() {
       },
     });
 
+    console.log("Response:", response);
+
     if (!response.ok) {
+      console.error("API error:", response.status, response.statusText);
       return {
         success: false,
         message: `Failed to fetch stats:: ${response.status} ${response.statusText}`,
@@ -23,7 +26,7 @@ export async function getAdminStats() {
     return {
       success: true,
       message: "Stats fetched successfully",
-      data: data.stats,
+      stats: data.stats,
     };
   } catch (error) {
     return {

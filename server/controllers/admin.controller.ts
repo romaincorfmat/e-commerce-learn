@@ -17,14 +17,19 @@ export const getAdminStats = async (
     }).session(session);
     const totalCategories = await Category.countDocuments({}).session(session);
 
-    const allOrders = await Order.find({})
-      .session(session)
-      .select("totalPrice");
+    const revenueResult = await Order.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$totalPrice" },
+        },
+      },
+    ]);
+    const totalRevenue = revenueResult[0]?.totalRevenue || 0;
 
-    const totalRevenue = allOrders.reduce(
-      (acc, order) => acc + order.totalPrice,
-      0
-    );
+    // const topSellingProducts = await Order.aggregate([
+    //   { $unwind: "$products" },
+    // ]);
 
     const stats = {
       totalOrders,

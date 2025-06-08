@@ -62,7 +62,9 @@ export async function createUser(
       res.status(400).json({ message: "Name and role are required" });
     }
 
-    if (role && role !== "admin" && role !== "user" && role !== "customer") {
+    const validRoles = ["admin", "user", "customer"];
+
+    if (role && !validRoles.includes(role)) {
       res.status(400).json({ message: "Invalid role specified" });
       return;
     }
@@ -171,7 +173,9 @@ export async function updateUserInfo(req: Request, res: Response) {
 
     const { name, email, role } = req.body;
 
-    if (role && role !== "admin" && role !== "user") {
+    const validRoles = ["admin", "user", "customer"];
+
+    if (role && !validRoles.includes(role)) {
       res.status(400).json({ message: "Invalid role specified" });
       return;
     }
