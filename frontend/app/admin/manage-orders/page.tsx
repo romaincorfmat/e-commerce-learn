@@ -75,8 +75,6 @@ const ManageOrdersPage = () => {
 
   const orders: Order[] = data?.data || [];
 
-  console.log("Orders", orders);
-
   const filteredOrders = statusFilter
     ? orders.filter((order) => order.status === statusFilter)
     : orders;

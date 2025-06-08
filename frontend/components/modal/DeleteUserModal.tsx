@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import useDeleteUser from "@/hooks/users/useDeleteUser";
 import { X } from "lucide-react";
+import { toast } from "sonner";
 
 interface Props {
   userId: string;
@@ -24,8 +25,14 @@ const DeleteUserModal = ({ userId }: Props) => {
 
   const handleAction = async (userId: string) => {
     try {
-      const result = deleteUserMutation.mutate(userId);
-      console.log("delete result: ", result);
+      deleteUserMutation.mutate(userId, {
+        onSuccess: () => {
+          toast.success("User deleted successfully");
+        },
+        onError: (error) => {
+          console.error(error);
+        },
+      });
     } catch (error) {
       console.error(error);
     }

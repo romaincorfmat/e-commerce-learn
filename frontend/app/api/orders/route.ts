@@ -19,8 +19,6 @@ export async function createOrder(cartId: string) {
       body: JSON.stringify({ shoppingCartId: cartId }),
     });
 
-    console.log("Order Response:", response);
-
     if (!response.ok) {
       return {
         success: false,

@@ -5,11 +5,14 @@ import useGetAdminStats from "@/hooks/admin/useGetAdminStats";
 import { DollarSign, List, Package, ShoppingCart, Users } from "lucide-react";
 import React from "react";
 
+const dailyRevenueTarget = 50000;
+const monthlyRevenueTarget = 100000;
+
 const AdminDashboardPage = () => {
   const { data, isLoading, error } = useGetAdminStats();
 
   const stats = data?.stats;
-  console.log("Stats", stats);
+
   if (error) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -51,6 +54,27 @@ const AdminDashboardPage = () => {
       <MetricCard
         title="Total Categories"
         value={stats?.totalCategories}
+        icon={<List />}
+        isLoading={isLoading}
+      />
+      <MetricCard
+        title="Today's Sales"
+        value={stats?.todayRevenue.toFixed(2)}
+        target={dailyRevenueTarget}
+        icon={<List />}
+        isLoading={isLoading}
+      />
+      <MetricCard
+        title="Yesterday's Sales"
+        value={stats?.yesterdayRevenue.toFixed(2)}
+        target={dailyRevenueTarget}
+        icon={<List />}
+        isLoading={isLoading}
+      />
+      <MetricCard
+        title="Last 30 days Sales"
+        value={stats?.monthlyRevenue.toFixed(2)}
+        target={monthlyRevenueTarget}
         icon={<List />}
         isLoading={isLoading}
       />

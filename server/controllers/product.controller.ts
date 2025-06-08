@@ -10,26 +10,6 @@ export async function createProduct(
   next: NextFunction
 ) {
   try {
-    // const loggedInUser = req.user;
-
-    // if (!loggedInUser || loggedInUser.role !== "admin") {
-    //   const error = new CustomError(
-    //     "Unauthorized access -- Only Admin can Create Products",
-    //     403
-    //   );
-    //   throw error;
-    // }
-
-    // console.log("Request body:", req.body);
-
-    // const imageToUpload = req.body.imageUrl;
-    // console.log("Image URL to upload:", imageToUpload);
-    // if (!imageToUpload || typeof imageToUpload !== "string") {
-    // throw new CustomError("Image URL is required and must be a string", 400);
-    // }
-
-    // const imageUrl = await uploadImage(imageToUpload);
-
     const existingProduct = await Product.findOne({ slug: req.body.slug });
 
     const incomingVariants = req.body.variants || [];

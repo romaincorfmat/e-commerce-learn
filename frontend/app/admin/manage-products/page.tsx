@@ -8,8 +8,6 @@ const ManageProducts = () => {
   const { data, isPending } = useGetProducts();
   const products = data?.data || [];
 
-  console.log("Products:", products);
-
   if (isPending) {
     return <div>Loading...</div>;
   }

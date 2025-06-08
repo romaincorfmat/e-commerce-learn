@@ -72,8 +72,8 @@ export async function createUser(
     const email = generateEmail(name);
     const password = generatePassword();
 
-    console.log("Generated email:", email);
-    console.log("Generated password:", password);
+    console.info("Generated email:", email);
+    console.info("Generated password:", password);
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);

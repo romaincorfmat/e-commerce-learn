@@ -10,8 +10,6 @@ export async function getAdminStats() {
       },
     });
 
-    console.log("Response:", response);
-
     if (!response.ok) {
       console.error("API error:", response.status, response.statusText);
       return {

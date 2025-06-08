@@ -49,7 +49,6 @@ const CreateNewProductForm = ({ onSuccess }: Props) => {
       };
       reader.readAsDataURL(file);
     }
-    console.log("Selected file:", file);
   };
 
   const { data, isPending } = useGetCategories();
@@ -86,8 +85,6 @@ const CreateNewProductForm = ({ onSuccess }: Props) => {
   const handleSubmit = async (
     data: z.infer<typeof CreateProductFormSchema>
   ) => {
-    console.log("Form data Submitted", data);
-
     try {
       // First check if we have an image to upload
       if (!imageFile) {
@@ -101,7 +98,6 @@ const CreateNewProductForm = ({ onSuccess }: Props) => {
       let imageUrl = "";
       try {
         imageUrl = await uploadImage(imageFile);
-        console.log("Cloudinary image URL:", imageUrl);
       } catch (error) {
         console.error("Error uploading image:", error);
         toast.error("Failed to upload image");
