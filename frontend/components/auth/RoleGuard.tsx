@@ -16,7 +16,6 @@ const RoleGuard = ({
   fallbackPath,
 }: RoleGuardProps) => {
   const { user, isLoading } = useUser();
-  console.log(" Role Guard: ", user);
   const router = useRouter();
 
   useEffect(() => {

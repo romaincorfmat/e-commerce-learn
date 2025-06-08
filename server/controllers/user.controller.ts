@@ -62,15 +62,18 @@ export async function createUser(
       res.status(400).json({ message: "Name and role are required" });
     }
 
-    if (role && role !== "admin" && role !== "user") {
+    const validRoles = ["admin", "user", "customer"];
+
+    if (role && !validRoles.includes(role)) {
       res.status(400).json({ message: "Invalid role specified" });
+      return;
     }
 
     const email = generateEmail(name);
     const password = generatePassword();
 
-    console.log("Generated email:", email);
-    console.log("Generated password:", password);
+    console.info("Generated email:", email);
+    console.info("Generated password:", password);
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -170,7 +173,9 @@ export async function updateUserInfo(req: Request, res: Response) {
 
     const { name, email, role } = req.body;
 
-    if (role && role !== "admin" && role !== "user") {
+    const validRoles = ["admin", "user", "customer"];
+
+    if (role && !validRoles.includes(role)) {
       res.status(400).json({ message: "Invalid role specified" });
       return;
     }

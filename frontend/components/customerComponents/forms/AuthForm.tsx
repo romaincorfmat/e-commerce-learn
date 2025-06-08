@@ -64,7 +64,6 @@ export function AuthForm<T extends FieldValues>({
       setIsLoading(true);
       const response = await onSubmit(data);
 
-      console.log("Response:", response);
       // Check response and show appropriate toast
       if (response.success) {
         toast.success(

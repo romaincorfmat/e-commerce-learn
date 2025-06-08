@@ -26,3 +26,22 @@ export const generateSlug = (name: string): string => {
     .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with hyphens
     .replace(/^-|-$/g, ""); // Remove leading and trailing hyphens
 };
+
+export function getStartOfDaysAgo(days: number) {
+  // Set day as today
+  const today = new Date();
+
+  // Set day as days ago
+  today.setDate(today.getDate() - days);
+
+  // set date to days ago at midnight
+  today.setHours(0, 0, 0, 0);
+  return today;
+}
+
+export function getEndOfYesterday() {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(23, 59, 59, 999);
+  return yesterday;
+}

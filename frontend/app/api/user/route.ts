@@ -142,8 +142,6 @@ export async function deleteUser(
       headers: { "Content-type": "application/json" },
     });
 
-    console.log("Delete Response: ", response);
-
     if (!response.ok) {
       console.error(
         "Failed to delete user:",

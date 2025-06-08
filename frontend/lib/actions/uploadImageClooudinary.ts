@@ -13,8 +13,6 @@ export const uploadImage = async (file: File): Promise<string> => {
   try {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-    console.log("upload image function triggered");
-    console.log("Uploading file to Cloudinary:", file.name);
 
     // Check file size
     const fileSizeInMB = buffer.length / (1024 * 1024);
@@ -34,10 +32,8 @@ export const uploadImage = async (file: File): Promise<string> => {
         },
         (error, result) => {
           if (error) {
-            console.log("Error uploading image to Cloudinary", error);
             reject(error);
           } else {
-            console.log("Image uploaded successfully:", result?.secure_url);
             resolve(result?.secure_url || ""); // Return the secure URL of the uploaded image
           }
         }

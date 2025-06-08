@@ -38,8 +38,6 @@ export async function createOrder(
       "items"
     ).session(session);
 
-    console.log("Shopping Cart Items: ", shoppingCartItems);
-
     if (!shoppingCartItems || shoppingCartItems.items.length === 0) {
       res.status(400).json({ message: "Shopping cart is empty" });
       return;
@@ -62,8 +60,6 @@ export async function createOrder(
       { session }
     );
 
-    console.log("New Order Created:", newOrder);
-
     if (!newOrder) {
       res.status(500).json({ message: "Failed to create order" });
       return;
@@ -74,12 +70,10 @@ export async function createOrder(
     const deleteCart =
       await ShoppingCart.findByIdAndDelete(shoppingCartId).session(session);
 
-    console.log("Shopping Cart Deleted:", deleteCart);
     if (!deleteCart) {
       res.status(500).json({ message: "Failed to delete shopping cart" });
       return;
     }
-    console.log("Shopping Cart Deleted");
 
     await session.commitTransaction();
     session.endSession();

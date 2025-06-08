@@ -78,8 +78,6 @@ export async function getShoppingCartByUserId(
 
     const data = await response.json();
 
-    console.log("Fetched Shopping Cart Data:", data);
-
     return {
       success: true,
       message: "Shopping cart fetched successfully",
@@ -161,7 +159,6 @@ export async function getCartStats(
     }
 
     const data = await response.json();
-    console.log("Cart Stats Data:", data);
     return {
       success: true,
       message: "Cart stats fetched successfully",

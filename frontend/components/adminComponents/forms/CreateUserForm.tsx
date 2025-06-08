@@ -34,7 +34,6 @@ export function CreateUserForm({ onSuccess }: Props) {
   const createUserMutation = useCreateUser();
 
   const handleSubmit = async (data: z.infer<typeof CreateUserFormSchema>) => {
-    console.log("Form data Submitted", data);
     try {
       createUserMutation.mutate(
         { formData: { name: data.name, role: data.role } },

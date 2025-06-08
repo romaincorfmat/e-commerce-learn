@@ -11,6 +11,7 @@ import productRouter from "./routes/product.routes";
 import shoppingCartRouter from "./routes/shoppingCart.routes";
 import loggerMiddleware from "./middlewares/logger.middleware";
 import orderRoutes from "./routes/order.routes";
+import adminRouter from "./routes/admin.routes";
 
 const app = express();
 const port = PORT || 8000;
@@ -35,8 +36,10 @@ app.use("/api/v1/categories", categoryRouter);
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/shopping-carts", shoppingCartRouter);
 app.use("/api/v1/orders", orderRoutes);
+app.use("/api/v1/admins", adminRouter);
 
 app.use(errorMiddleware);
+
 app.get("/", (req, res) => {
   console.log("Received a request at /");
   res.send("Hello, World!");
@@ -44,5 +47,5 @@ app.get("/", (req, res) => {
 
 app.listen(port, () => {
   connectToDatabase();
-  console.log(`Server API running on port ${port}`);
+  console.info(`Server API running on port ${port}`);
 });

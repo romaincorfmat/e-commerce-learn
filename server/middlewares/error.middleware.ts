@@ -9,9 +9,7 @@ const errorMiddleware = (
 ) => {
   try {
     let error = { ...err };
-    error.message = err.message || "Internal Server Error cunt";
-
-    console.log(err);
+    error.message = err.message || "Internal Server Error";
 
     if (err.name === "CastError") {
       const message = `Resource not found - ${err.message}`;

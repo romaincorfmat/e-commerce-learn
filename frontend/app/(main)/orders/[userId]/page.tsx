@@ -37,8 +37,6 @@ const CustomerOrderPage = () => {
   const params = useParams();
   const userId = params.userId as string;
 
-  console.log("Params", userId);
-
   const { data, isLoading } = useGetCustomerOrders(userId || "");
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 

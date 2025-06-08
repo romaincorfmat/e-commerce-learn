@@ -25,7 +25,6 @@ const ProductDetailPage = () => {
   }
 
   const product = data.data;
-  console.log("Product: ", product);
 
   return (
     <div className="flex flex-col gap-4 px-4">

@@ -208,8 +208,6 @@ export async function deleteShoppingCartItem(
 
     const itemId = req.params.id;
 
-    console.log("Item ID to delete:", itemId);
-
     if (!itemId) {
       throw new CustomError("Item ID is required", 400);
     }
@@ -246,7 +244,6 @@ export async function getCartStats(
 ) {
   try {
     const user = req.user;
-    console.log("User ID:", user?._id);
     if (!user) {
       throw new CustomError("User not authenticated", 401);
     }

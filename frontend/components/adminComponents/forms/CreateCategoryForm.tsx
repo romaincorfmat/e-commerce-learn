@@ -35,7 +35,6 @@ export function CreateCategoryForm({ onSuccess }: Props) {
   const handleSubmit = async (
     data: z.infer<typeof CreateCategoryFormSchema>
   ) => {
-    console.log("Form data Submitted", data);
     try {
       createCategoryMutation.mutate(
         { name: data.name },
